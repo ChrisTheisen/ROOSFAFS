@@ -62,7 +62,7 @@
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(229, 13);
             this.linkLabel1.TabIndex = 2;
-            this.linkLabel1.Text = "https://github.com/TheFutureIsLater/Searcher";
+            this.linkLabel1.Text = "https://github.com/ChrisTheisen/ROOSFAFS";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
             // 
             // textBox2
