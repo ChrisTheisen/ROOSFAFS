@@ -1,0 +1,17 @@
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\bin\Release\ROOSFAFS.exe.config
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\bin\Release\ROOSFAFS.exe
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\bin\Release\ROOSFAFS.pdb
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.csproj.AssemblyReference.cache
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.About.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.FancyTextBox.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.LanguageSyntax.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.MainWindow.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.Regexr.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.Properties.Resources.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.TextViewerSettingsForm.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.SettingsForm.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\Searcher.TextViewer.resources
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.csproj.GenerateResource.cache
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.csproj.CoreCompileInputs.cache
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.exe
+C:\Projects\ROOSFAFS\ROOSFAFS\ROOSFAFS\obj\Release\ROOSFAFS.pdb
