@@ -24,12 +24,13 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlBottom = new System.Windows.Forms.Panel();
+            this.lblSize = new System.Windows.Forms.Label();
             this.lblPos = new System.Windows.Forms.Label();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnFindInFolder = new System.Windows.Forms.Button();
             this.rtbContent = new System.Windows.Forms.RichTextBox();
             this.pnlBody = new System.Windows.Forms.Panel();
-            this.lblSize = new System.Windows.Forms.Label();
+            this.pnlLineNumbers = new System.Windows.Forms.Panel();
             this.pnlBottom.SuspendLayout();
             this.pnlBody.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +47,15 @@
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(445, 50);
             this.pnlBottom.TabIndex = 0;
+            // 
+            // lblSize
+            // 
+            this.lblSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblSize.Location = new System.Drawing.Point(3, 32);
+            this.lblSize.Name = "lblSize";
+            this.lblSize.Size = new System.Drawing.Size(200, 13);
+            this.lblSize.TabIndex = 3;
+            this.lblSize.Text = "Length:1 Lines:1";
             // 
             // lblPos
             // 
@@ -81,31 +91,33 @@
             // 
             this.rtbContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbContent.Location = new System.Drawing.Point(0, 0);
+            this.rtbContent.Location = new System.Drawing.Point(43, 0);
             this.rtbContent.Name = "rtbContent";
-            this.rtbContent.Size = new System.Drawing.Size(445, 387);
+            this.rtbContent.Size = new System.Drawing.Size(402, 387);
             this.rtbContent.TabIndex = 1;
             this.rtbContent.Text = "";
             this.rtbContent.WordWrap = false;
             this.rtbContent.SelectionChanged += new System.EventHandler(this.rtbContent_SelectionChanged);
+            this.rtbContent.VScroll += new System.EventHandler(this.rtbContent_VScroll);
+            this.rtbContent.Resize += new System.EventHandler(this.rtbContent_Resize);
             // 
             // pnlBody
             // 
             this.pnlBody.Controls.Add(this.rtbContent);
+            this.pnlBody.Controls.Add(this.pnlLineNumbers);
             this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlBody.Location = new System.Drawing.Point(0, 0);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Size = new System.Drawing.Size(445, 387);
             this.pnlBody.TabIndex = 0;
             // 
-            // lblSize
+            // pnlLineNumbers
             // 
-            this.lblSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblSize.Location = new System.Drawing.Point(3, 32);
-            this.lblSize.Name = "lblSize";
-            this.lblSize.Size = new System.Drawing.Size(200, 13);
-            this.lblSize.TabIndex = 3;
-            this.lblSize.Text = "Length:1 Lines:1";
+            this.pnlLineNumbers.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlLineNumbers.Location = new System.Drawing.Point(0, 0);
+            this.pnlLineNumbers.Name = "pnlLineNumbers";
+            this.pnlLineNumbers.Size = new System.Drawing.Size(43, 387);
+            this.pnlLineNumbers.TabIndex = 2;
             // 
             // FancyTextBox
             // 
@@ -131,5 +143,6 @@
         private System.Windows.Forms.Panel pnlBody;
         private System.Windows.Forms.Label lblPos;
         private System.Windows.Forms.Label lblSize;
+        private System.Windows.Forms.Panel pnlLineNumbers;
     }
 }
