@@ -381,15 +381,7 @@ namespace Searcher
 		{
             foreach (var prop in _directoryInfo.GetType().GetProperties())
             {
-                var name = prop.Name;
-                switch (prop.Name)
-                {
-                    case "FullPath":
-                        name = "Directory";
-                        break;
-                    default:
-                        break;
-                }
+				var name = prop.Name == "FullName" ? "Directory" : prop.Name;
 
                 if (columns.Contains(name))
                 {

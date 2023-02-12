@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextViewer));
             this.mnuTV = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +62,7 @@
             this.colLineNum = new System.Data.DataColumn();
             this.colChar = new System.Data.DataColumn();
             this.colContext = new System.Data.DataColumn();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.mnuTV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltTextViewer)).BeginInit();
             this.spltTextViewer.Panel1.SuspendLayout();
@@ -174,6 +176,8 @@
             this.tabFiles.SelectedIndexChanged += new System.EventHandler(this.TabFiles_TabIndexChanged);
             this.tabFiles.TabIndexChanged += new System.EventHandler(this.TabFiles_TabIndexChanged);
             this.tabFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TabFiles_MouseDown);
+            this.tabFiles.MouseLeave += new System.EventHandler(this.tabFiles_MouseLeave);
+            this.tabFiles.MouseHover += new System.EventHandler(this.tabFiles_MouseHover);
             // 
             // splitRightPanel
             // 
@@ -220,9 +224,12 @@
             this.dgvHighlights.Name = "dgvHighlights";
             this.dgvHighlights.RowHeadersVisible = false;
             this.dgvHighlights.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvHighlights.ShowCellToolTips = false;
             this.dgvHighlights.Size = new System.Drawing.Size(270, 97);
             this.dgvHighlights.TabIndex = 5;
             this.dgvHighlights.DoubleClick += new System.EventHandler(this.dgvHighlights_DoubleClick);
+            this.dgvHighlights.MouseLeave += new System.EventHandler(this.dgvHighlights_MouseLeave);
+            this.dgvHighlights.MouseHover += new System.EventHandler(this.dgvHighlights_MouseHover);
             // 
             // lblCounter
             // 
@@ -315,10 +322,13 @@
             this.dgvFind.Name = "dgvFind";
             this.dgvFind.RowHeadersVisible = false;
             this.dgvFind.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvFind.ShowCellToolTips = false;
             this.dgvFind.Size = new System.Drawing.Size(270, 173);
             this.dgvFind.TabIndex = 0;
             this.dgvFind.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFind_CellClick);
             this.dgvFind.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFind_CellContentDoubleClick);
+            this.dgvFind.MouseLeave += new System.EventHandler(this.dgvFind_MouseLeave);
+            this.dgvFind.MouseHover += new System.EventHandler(this.dgvFind_MouseHover);
             // 
             // btnFind
             // 
@@ -356,7 +366,7 @@
             this.Highlighters,
             this.FindHits});
             // 
-            // Hilighters
+            // Highlighters
             // 
             this.Highlighters.Columns.AddRange(new System.Data.DataColumn[] {
             this.colKey,
@@ -412,6 +422,12 @@
             // colContext
             // 
             this.colContext.ColumnName = "Context";
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 0;
+            this.toolTip.ShowAlways = true;
+            this.toolTip.ToolTipTitle = "ROOSFAFS Top Tips:";
             // 
             // TextViewer
             // 
@@ -489,5 +505,6 @@
         private System.Windows.Forms.ToolStripMenuItem closeTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

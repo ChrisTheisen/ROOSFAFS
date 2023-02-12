@@ -58,6 +58,7 @@
             this.txtRoot = new System.Windows.Forms.TextBox();
             this.btnRootFolder = new System.Windows.Forms.Button();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.chkShowTooltip = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numContextSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barOpacity)).BeginInit();
             this.SuspendLayout();
@@ -167,11 +168,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 62);
+            this.label3.Location = new System.Drawing.Point(19, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 13);
+            this.label3.Size = new System.Drawing.Size(77, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Common Skip Folders";
+            this.label3.Text = "Folders to Skip";
             // 
             // btnRestoreDefault
             // 
@@ -188,21 +189,21 @@
             // 
             this.txtSkipExtensions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSkipExtensions.Location = new System.Drawing.Point(151, 113);
+            this.txtSkipExtensions.Location = new System.Drawing.Point(137, 113);
             this.txtSkipExtensions.Multiline = true;
             this.txtSkipExtensions.Name = "txtSkipExtensions";
             this.txtSkipExtensions.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSkipExtensions.Size = new System.Drawing.Size(331, 42);
+            this.txtSkipExtensions.Size = new System.Drawing.Size(345, 42);
             this.txtSkipExtensions.TabIndex = 13;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 123);
+            this.label4.Location = new System.Drawing.Point(19, 116);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(126, 13);
+            this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 12;
-            this.label4.Text = "Common Skip Extensions";
+            this.label4.Text = "Extensions to Skip";
             // 
             // clbResults
             // 
@@ -277,7 +278,7 @@
             // chkLogWarning
             // 
             this.chkLogWarning.AutoSize = true;
-            this.chkLogWarning.Location = new System.Drawing.Point(348, 467);
+            this.chkLogWarning.Location = new System.Drawing.Point(348, 464);
             this.chkLogWarning.Name = "chkLogWarning";
             this.chkLogWarning.Size = new System.Drawing.Size(87, 17);
             this.chkLogWarning.TabIndex = 21;
@@ -287,7 +288,7 @@
             // chkLogError
             // 
             this.chkLogError.AutoSize = true;
-            this.chkLogError.Location = new System.Drawing.Point(348, 490);
+            this.chkLogError.Location = new System.Drawing.Point(348, 483);
             this.chkLogError.Name = "chkLogError";
             this.chkLogError.Size = new System.Drawing.Size(69, 17);
             this.chkLogError.TabIndex = 22;
@@ -300,9 +301,9 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(328, 421);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(52, 13);
+            this.label7.Size = new System.Drawing.Size(93, 13);
             this.label7.TabIndex = 23;
-            this.label7.Text = "Logging";
+            this.label7.Text = "Logging + Misc";
             // 
             // label8
             // 
@@ -345,7 +346,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(28, 36);
+            this.label12.Location = new System.Drawing.Point(19, 36);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(99, 13);
             this.label12.TabIndex = 28;
@@ -372,11 +373,22 @@
             this.btnRootFolder.UseVisualStyleBackColor = true;
             this.btnRootFolder.Click += new System.EventHandler(this.btnRootFolder_Click);
             // 
+            // chkShowTooltip
+            // 
+            this.chkShowTooltip.AutoSize = true;
+            this.chkShowTooltip.Location = new System.Drawing.Point(348, 506);
+            this.chkShowTooltip.Name = "chkShowTooltip";
+            this.chkShowTooltip.Size = new System.Drawing.Size(93, 17);
+            this.chkShowTooltip.TabIndex = 31;
+            this.chkShowTooltip.Text = "Show Tooltips";
+            this.chkShowTooltip.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(544, 564);
+            this.Controls.Add(this.chkShowTooltip);
             this.Controls.Add(this.btnRootFolder);
             this.Controls.Add(this.txtRoot);
             this.Controls.Add(this.label12);
@@ -450,5 +462,6 @@
         private System.Windows.Forms.TextBox txtRoot;
         private System.Windows.Forms.Button btnRootFolder;
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
+        private System.Windows.Forms.CheckBox chkShowTooltip;
     }
 }

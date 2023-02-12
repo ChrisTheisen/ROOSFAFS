@@ -184,7 +184,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
     <Content Include="ROOSFAFS.ico" />
     <Content Include="txtIcon.ico" />
   </ItemGroup>

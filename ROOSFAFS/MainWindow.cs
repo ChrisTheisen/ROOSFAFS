@@ -10,12 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-//BUGS
-
-//TODO
-//Re-upload to GitHub
-
-
 namespace Searcher
 {
     public partial class MainWindow : Form
@@ -49,14 +43,9 @@ namespace Searcher
             folderBrowser.SelectedPath = @"C:\";
 
             rtbLog.AppendText("Opened: " + DateTime.Now);
-
         }
 
         #region Events
-        private void BtnBuildMultiSearch_Click(object sender, EventArgs e)
-        {
-
-        }
         private void BtnContext_Click(object sender, EventArgs e)
         {
             try
@@ -70,7 +59,8 @@ namespace Searcher
         }
         private void BtnCopyFiles_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 SelectedToClipboard();
             }
             catch (Exception x)
@@ -222,6 +212,9 @@ namespace Searcher
                 case Keys.Delete:
                     HideSelectedRows();
                     break;
+                case Keys.Enter:
+                    ViewSelectedItems();
+                    break;
 
             }
         }
@@ -268,7 +261,7 @@ namespace Searcher
                 skipExt = new string[_properties.SkipExtensions.Count];
                 _properties.SkipExtensions.CopyTo(skipExt, 0);
             }
-            skipExt = skipExt.Concat(txtSkipExtention.Text.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)).ToArray();
+            skipExt = skipExt.Concat(txtSkipExtension.Text.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)).ToArray();
 
             var skipFolder = new string[0];
             if (chkSkipFolders.Checked)
@@ -342,39 +335,39 @@ namespace Searcher
 
             PostSearchUiCleanup(failedFiles);
         }
-        private void PostSearchUiCleanup( Dictionary<string, Exception> failedFiles )
-	    {
-	        foreach (var key in failedFiles.Keys)
-	        {
+        private void PostSearchUiCleanup(Dictionary<string, Exception> failedFiles)
+        {
+            foreach (var key in failedFiles.Keys)
+            {
                 AddWarning($"Skipped {key}: {failedFiles[key]}");
-	        }
-	        PopulateRows();
+            }
+            PopulateRows();
 
-            MultiThread.SetProperty( btnSearch, "Enabled", true );
-		    MultiThread.UpdateToolStripStatus( lblStatus, _stop ? $"Stopped: {_dataSource.Rows.Count} hits"   : $"Done: {_dataSource.Rows.Count} hits" );
-		    var endTime = DateTime.Now;
-		    var duration = endTime - _startTime;
-		    MultiThread.UpdateToolStripStatus( lblStopped, $@"Stop Search: {endTime:HH:mm:ss}" );
+            MultiThread.SetProperty(btnSearch, "Enabled", true);
+            MultiThread.UpdateToolStripStatus(lblStatus, _stop ? $"Stopped: {_dataSource.Rows.Count} hits" : $"Done: {_dataSource.Rows.Count} hits");
+            var endTime = DateTime.Now;
+            var duration = endTime - _startTime;
+            MultiThread.UpdateToolStripStatus(lblStopped, $@"Stop Search: {endTime:HH:mm:ss}");
             AddInfo($@"Stop Search: {endTime:HH:mm:ss}");
-		    MultiThread.UpdateToolStripStatus( lblDuration, $@"Duration: {duration.TotalSeconds}s" );
+            MultiThread.UpdateToolStripStatus(lblDuration, $@"Duration: {duration.TotalSeconds}s");
 
 
-			foreach ( Control c in Controls )
-		    {
-			    if ( c is Button || c is CheckBox || c is TextBox )
-			    {
-				    MultiThread.SetProperty( c, "Enabled", true );
-			    }
-		    }
+            foreach (Control c in Controls)
+            {
+                if (c is Button || c is CheckBox || c is TextBox)
+                {
+                    MultiThread.SetProperty(c, "Enabled", true);
+                }
+            }
 
-		    MultiThread.SetProperty( btnStop, "BackColor", SystemColors.Control );
-		    MultiThread.SetProperty( btnStop, "Enabled", false );
-            MultiThread.SetProperty( btnStop, "Visible", false );
+            MultiThread.SetProperty(btnStop, "BackColor", SystemColors.Control);
+            MultiThread.SetProperty(btnStop, "Enabled", false);
+            MultiThread.SetProperty(btnStop, "Visible", false);
 
-            MultiThread.InvokeMethod( txtSearchString, "Focus", null );
-		    MultiThread.SetProperty( grdResults, "DataSource", _dataSource );
+            MultiThread.InvokeMethod(txtSearchString, "Focus", null);
+            MultiThread.SetProperty(grdResults, "DataSource", _dataSource);
 
-            MultiThread.SetProperty( tabControl, "SelectedIndex", 0 );
+            MultiThread.SetProperty(tabControl, "SelectedIndex", 0);
 
             //might be a better way to do this, but this works.
             if (grdResults.Columns.Count > 0)
@@ -427,7 +420,7 @@ namespace Searcher
         {
             foreach (DataGridViewRow row in grdResults.Rows)
             {
-	            var rowText = new StringBuilder();
+                var rowText = new StringBuilder();
                 foreach (DataGridViewCell cell in row.Cells) { rowText.Append(cell.Value); }
                 var itemText = rowText.ToString();
 
@@ -453,7 +446,8 @@ namespace Searcher
         }
         private void PostFilterUiCleanup()
         {
-            foreach (Control c in Controls) { 
+            foreach (Control c in Controls)
+            {
                 MultiThread.SetProperty(c, "Enabled", true);
             }
             MultiThread.SetProperty(btnStop, "Enabled", false);
@@ -464,10 +458,10 @@ namespace Searcher
 
         private void ViewSelectedItems()
         {
-	        var files = new List<string>();
-	        foreach (DataGridViewRow row in grdResults.SelectedRows)
-	        {
-	            if (!row.Visible) { continue; }
+            var files = new List<string>();
+            foreach (DataGridViewRow row in grdResults.SelectedRows)
+            {
+                if (!row.Visible) { continue; }
 
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
                 if (File.Exists(filePath))
@@ -485,7 +479,7 @@ namespace Searcher
                     {
                         System.Diagnostics.Process.Start(_properties.TextEditor, filePath);
                     }
-                    catch(Exception x)
+                    catch (Exception x)
                     {
                         AddError($"Error opening text Text Editor '{_properties.TextEditor}'");
                         AddError(x.Message);
@@ -493,10 +487,10 @@ namespace Searcher
                     }
                 }
             }
-            else if(files.Count > 0)
+            else if (files.Count > 0)
             {
                 var tv = new TextViewer();
-                tv.ShowFiles("Selected Files", files, txtSearchString.Text);
+                tv.ShowFiles("Selected Files", files, txtSearchString.Text, _properties.ShowToolTip);
             }
 
         }
@@ -513,16 +507,16 @@ namespace Searcher
                 if (!row.Visible) { continue; }
 
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
-	            var matchLines = chkSearchRegex.Checked ? GetFileContextsRegex(filePath) : GetFileContexts(filePath);
+                var matchLines = chkSearchRegex.Checked ? GetFileContextsRegex(filePath) : GetFileContexts(filePath);
                 matchFiles.Add(GetContexts(matchLines, filePath, _properties.ContextSize));
 
                 mc += matchLines.Length;
-	            // ReSharper disable once LocalizableElement
+                // ReSharper disable once LocalizableElement
                 lblStatus.Text = $"{++c} files searched; {mc} total matches";
             }
 
             var tv = new TextViewer();
-            tv.ShowContexts(title, matchFiles, searchString, chkSearchRegex.Checked);
+            tv.ShowContexts(title, matchFiles, searchString, chkSearchRegex.Checked, _properties.ShowToolTip);
         }
         private int[] GetFileContexts(string filePath)
         {
@@ -535,8 +529,8 @@ namespace Searcher
                 while (!sr.EndOfStream)
                 {
                     var line = sr.ReadLine();
-	                lineNum++;
-	                if ( string.IsNullOrEmpty(line)) continue;
+                    lineNum++;
+                    if (string.IsNullOrEmpty(line)) continue;
 
                     if (line.Contains(tempSearch))
                     {
@@ -559,7 +553,7 @@ namespace Searcher
                 {
                     var line = sr.ReadLine();
                     lineNum++;
-	                if (string.IsNullOrEmpty(line)) continue;
+                    if (string.IsNullOrEmpty(line)) continue;
 
                     if (Regex.IsMatch(line, searchString))
                     {
@@ -605,14 +599,14 @@ namespace Searcher
                 if (!row.Visible) { continue; }
 
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
-	            if (!File.Exists(filePath)) continue;
+                if (!File.Exists(filePath)) continue;
 
-	            // combine the arguments together
-	            var argument = "/select, \"" + filePath + "\"";
-	            System.Diagnostics.Process.Start("explorer.exe", argument);
-	            c++;
+                // combine the arguments together
+                var argument = "/select, \"" + filePath + "\"";
+                System.Diagnostics.Process.Start("explorer.exe", argument);
+                c++;
             }
-	        // ReSharper disable once LocalizableElement
+            // ReSharper disable once LocalizableElement
             lblStatus.Text = c + " File Locations Opened.";
         }
         private void SelectedToClipboard()
@@ -623,14 +617,14 @@ namespace Searcher
                 if (!row.Visible) { continue; }
 
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
-	            if (!File.Exists(filePath)) continue;
+                if (!File.Exists(filePath)) continue;
 
-	            // combine the arguments together
-	            filePaths.Add(filePath);
+                // combine the arguments together
+                filePaths.Add(filePath);
             }
 
             Clipboard.SetFileDropList(filePaths);
-	        // ReSharper disable once LocalizableElement
+            // ReSharper disable once LocalizableElement
             lblStatus.Text = filePaths.Count + " Files copied to clipboard";
         }
 
@@ -754,6 +748,22 @@ namespace Searcher
                 _newWarnings = false;
             }
         }
+
+        private void ShowToolTip(Control control, string text)
+        {
+            if (!_properties.ShowToolTip) { return; }
+
+            text += "\r\n\r\n (Disable tooltips in setttings)";
+            var p = new Point(control.Width, control.Height);
+
+            toolTip.Show(text, control, p);
+        }
+
+        private void HideToolTip()
+        {
+            toolTip.Hide(this);
+        }
+
         #endregion
 
         #region logging
@@ -809,7 +819,7 @@ namespace Searcher
                     throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
             }
 
-            MultiThread.InvokeMethod(rtbLog, "Select", new object[] { 0 ,0 });
+            MultiThread.InvokeMethod(rtbLog, "Select", new object[] { 0, 0 });
         }
 
         private void AddInfo(string message)
@@ -872,11 +882,11 @@ namespace Searcher
             var skipFolders = hi.SearchParameters.SkipFolder.Where(x => !_properties.SkipFolders.Contains(x));
             var skipExtensions = hi.SearchParameters.SkipExtension.Where(x =>
                 !_properties.SkipExtensions.Contains(x) &&
-                !_properties.SkipExtensions.Contains(x.Replace(".",""))
+                !_properties.SkipExtensions.Contains(x.Replace(".", ""))
             );
 
             txtSkipFolder.Text = string.Join(", ", skipFolders);
-            txtSkipExtention.Text = string.Join(", ", skipExtensions);
+            txtSkipExtension.Text = string.Join(", ", skipExtensions);
 
 
             txtSearchExtension.Text = string.Join(", ", hi.SearchParameters.SearchExtension);
@@ -896,28 +906,120 @@ namespace Searcher
 
         private void GrdResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.RowIndex == -1) { return; }
+            if (e.RowIndex == -1) { return; }
             ViewSelectedItems();
         }
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             new About().ShowDialog();
         }
 
-        private void BtnBuildRegex_Click(object sender, EventArgs e) {
-            try {
+        private void BtnBuildRegex_Click(object sender, EventArgs e)
+        {
+            try
+            {
                 string input = string.IsNullOrEmpty(txtSearchString.Text) ? "[REGEX GOES HERE]" : txtSearchString.Text;
                 var helper = new Regexr(input);
-                if (helper.ShowDialog() == DialogResult.OK) {
+                if (helper.ShowDialog() == DialogResult.OK)
+                {
                     txtSearchString.Text = helper.Output;
                     chkSearchRegex.Checked = true;
                 }
 
                 helper.Dispose();
             }
-            catch (Exception x) {
+            catch (Exception x)
+            {
                 AddError(x.Message);
             }
         }
+
+        #region tooltips
+        private void control_MouseLeave(object sender, EventArgs e)
+        {
+            HideToolTip();
+        }
+
+        private void control_MouseHover(object sender, EventArgs e)
+        {
+            if (!(sender is Control)) return;
+
+            string text = null;
+            switch ((sender as Control).Name)
+            {
+                case "grdResults":
+                    if (grdResults.Rows.Count == 0) return;
+                    text = "* Double click row to open file.\r\n* Hold CTRL or SHIFT and click to select multiple rows.\r\n* Press 'Delete' to hide selected files.\r\n* Press 'Enter' to open selected files.";
+                    break;
+                case "txtSearchString":
+                    text = "Enter search string here and press 'Enter' or click Search button.";
+                    break;
+                case "btnBuildRegexSearch":
+                    text = "Get help building regex.";
+                    break;
+                case "btnCopyFiles":
+                    text = "Copy selected files to clipboard.";
+                    break;
+                case "btnView":
+                    text = "Open selected files in text viewer. Custom text viewer can be set in Settings.";
+                    break;
+                case "btnFindInFolder":
+                    text = "Open folder of all selected files.";
+                    break;
+                case "btnFilter":
+                    text = "Filter results based on the filter string.";
+                    break;
+                case "txtFilter":
+                    text = "Do a follow up search. Search remaining results and either select matches or non-matches.";
+                    break;
+                case "btnRestore":
+                    text = "Restore all hidden rows.";
+                    break;
+                case "btnRemove":
+                    text = "Hide all selected rows.";
+                    break;
+                case "rdoContents":
+                    text = "Search file contents, name, and path.";
+                    break;
+                case "rdoFileName":
+                    text = "Search file name and path.";
+                    break;
+                case "rdoFolderName":
+                    text = "Search folder name and path.";
+                    break;
+                case "txtSkipFolder":
+                    text = "Comma delimited list of folders to skip.";
+                    break;
+                case "chkSkipFolders":
+                    text = "Skip the common folders to skip defined in the settings.";
+                    break;
+                case "txtSearchExtension":
+                    text = "If blank all file extensions not set in the Skip Extionsion will be searched.\r\nIf populated this is a comma delimited list of file extensions to search.\r\nAll files with a different file extension will be skipped.\r\nThis will supersede the Skip Extensions below.";
+                    break;
+                case "txtSkipExtension":
+                    text = "Comma delimited list of file extensions to skip.";
+                    break;
+                case "chkSkipExtensions":
+                    text = "Skip the file extentions to skip defined in the settings.";
+                    break;
+                case "chkStopAfterN":
+                    text = "Stop searching after the desired number of results has been met.";
+                    break;
+                case "lstSearchHistory":
+                    text = "Double click an item to restore the search results.\r\nThis does not redo the search but only recovers the past results.\r\nAny changes to files or folders since the search was done will not be shown.\r\nResets when ROOSFAFS is closed.";
+                    break;
+                case "rtbLog":
+                    text = "Logs past actions. Set the level of logging in the settings.\r\nResets when ROOSFAFS is closed.";
+                    break;
+
+            }
+
+            if (string.IsNullOrWhiteSpace(text)) return;
+            ShowToolTip((Control)sender, text);
+
+        }
+        #endregion
+
     }
 }

@@ -18,6 +18,7 @@ namespace Searcher
         private const bool _defaultLogInfo = true;
         private const bool _defaultLogWarning = true;
         private const bool _defaultLogError = true;
+        private const bool _defaultShowToolTip = true;
         private readonly string[] _defaultSkipExtensions = {"svn", "git", "vs", "dll", "exe"};
         private readonly string[] _defaultSkipFolders = {"RECYCLE"};
         private readonly string[] _defaultResultsColumns = {"CreationTime", "LastWriteTime", "LastAccessTime", "Length"};
@@ -64,6 +65,12 @@ namespace Searcher
             get => (bool)Settings.Default["logError"];
             set => Settings.Default["logError"] = value;
         }
+        private static bool _showToolTip
+        {
+            get => (bool)Settings.Default["showToolTip"];
+            set => Settings.Default["showToolTip"] = value;
+        }
+
         private static StringCollection _skipFolders => (StringCollection)Settings.Default["commonSkipFolders"];
         private static StringCollection _skipExtensions => (StringCollection)Settings.Default["commonSkipExtensions"];
         private static StringCollection _resultsColumns => (StringCollection)Settings.Default["resultsColumns"];
@@ -77,6 +84,7 @@ namespace Searcher
         public bool LogInfo => _logInfo;
         public bool LogWarning => _logWarning;
         public bool LogError => _logError;
+        public bool ShowToolTip => _showToolTip;
         public StringCollection SkipFolders => _skipFolders;
         public StringCollection SkipExtensions => _skipExtensions;
 
@@ -115,6 +123,7 @@ namespace Searcher
             chkLogInfo.Checked = LogInfo;
             chkLogWarning.Checked = LogWarning;
             chkLogError.Checked = LogError;
+            chkShowTooltip.Checked = ShowToolTip;
             numContextSize.Value = ContextSize;
             SetAllChecks(clbResults, _resultsColumns);
             SetListItems(lstColOrder, _columnOrder);
@@ -140,6 +149,7 @@ namespace Searcher
             _logInfo = chkLogInfo.Checked;
             _logWarning = chkLogWarning.Checked;
             _logError = chkLogError.Checked;
+            _showToolTip = chkShowTooltip.Checked;
             _skipFolders.Clear();
             _skipExtensions.Clear();
             _resultsColumns.Clear();
@@ -163,6 +173,7 @@ namespace Searcher
             chkLogInfo.Checked = _logInfo;
             chkLogWarning.Checked = _logWarning;
             chkLogError.Checked = _logError;
+            chkShowTooltip.Checked = _showToolTip;
             txtSkipFolders.Text = string.Join(",", _skipFolders);
             txtSkipExtensions.Text = string.Join(",", _skipExtensions);
             SetAllChecks(clbResults, _resultsColumns);
@@ -189,8 +200,9 @@ namespace Searcher
             if (itemList == null) return;
             lst.Items.Clear();
 
-            foreach (var item in itemList)
+            foreach (string item in itemList)
             {
+                if (item == "Name") { continue; }
                 if (!lst.Items.Contains(item)) lst.Items.Add(item);
             }
         }
@@ -223,6 +235,7 @@ namespace Searcher
             _logInfo = _defaultLogInfo;
             _logWarning = _defaultLogWarning;
             _logError = _defaultLogError;
+            _showToolTip = _defaultShowToolTip;
 
             PopulateInputs();
         }

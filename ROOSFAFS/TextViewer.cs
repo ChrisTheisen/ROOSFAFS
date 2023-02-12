@@ -32,6 +32,7 @@ namespace Searcher
                 return temp;
             }
         }
+        private bool _showToolTip = true;
 
         #region build content
         public TextViewer()
@@ -46,12 +47,12 @@ namespace Searcher
 
                 dgvHighlights.Columns[key.ToString()].DisplayIndex = index;
             }
-
         }
 
-        public void ShowContexts(string title, List<FileContext> matchFiles, string searchString, bool isRegex)
+        public void ShowContexts(string title, List<FileContext> matchFiles, string searchString, bool isRegex, bool showToolTips)
         {
             Text = title;
+            _showToolTip = showToolTips;
 
             Show();
             AddHilighter(searchString, Color.Red, SystemColors.Control);
@@ -59,11 +60,12 @@ namespace Searcher
             txtNewHilight.Focus();
         }
 
-        public void ShowFiles(string title, List<string> filePaths, string searchString)
+        public void ShowFiles(string title, List<string> filePaths, string searchString, bool showToolTips)
         {
             Show();
             AddHilighter(searchString, Color.Red, SystemColors.Control);
 
+            _showToolTip = showToolTips;
             Text = title;
             IntPtr intPtr = tabFiles.Handle;
             foreach (var filePath in filePaths)
@@ -101,6 +103,24 @@ namespace Searcher
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _properties.Show();
+        }
+       
+        void EnforceSettings()
+        {
+            //TODO: FONT
+
+            if (!_properties.showRightPanel)
+            {
+                spltTextViewer.Panel2Collapsed = true;
+                spltTextViewer.Panel2.Hide();
+            }
+            else
+            {
+                spltTextViewer.Panel2Collapsed = false;
+                spltTextViewer.Panel2.Show();
+            }
+
+
         }
         #endregion
 
@@ -180,7 +200,6 @@ namespace Searcher
             lblCounter.Text = Highlighters.Rows.Count + @"/15";
             txtNewHilight.Text = null;
             FixGridColumnWidths(dgvHighlights);
-
 
             var hs = new HighlightSearch
             {
@@ -325,6 +344,81 @@ namespace Searcher
         }
         #endregion
 
+        #region events
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_properties.ShowDialog() == DialogResult.OK)
+                {
+                    EnforceSettings();
+                }
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Error setting settings:" + x.Message);
+            }
+        }
+        private void languageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_languageSyntax.ShowDialog() == DialogResult.OK)
+                {
+                    //do language syntax
+                }
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Error setting settings:" + x.Message);
+            }
+        }
+
+        private void dgvHighlights_DoubleClick(object sender, EventArgs e)
+        {
+            var rows = (sender as DataGridView)?.SelectedRows;
+            if (rows?.Count == 1)
+            {
+                txtFind.Text = rows[0].Cells[0].Value.ToString();
+                FindHits.Rows.Clear();
+
+                for (var i = 0; i < tabFiles.TabCount; i++)
+                {
+                    FindInTab(i);
+                }
+            }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Tabbed Text Viewer made for reviewing ROOSFAFS Search Results.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var ftb = (FancyTextBox)tabFiles.SelectedTab.Controls[0];
+                File.WriteAllText(ftb.FilePath, ftb.Text);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show("Error Saving File:" + x.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void closeTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseTab(tabFiles.SelectedIndex);
+        }
+
+        private void closeWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+
+        #endregion
         private void TabFiles_MouseDown(object sender, MouseEventArgs e)
         {
             if (!(sender is TabControl tc)) return;
@@ -370,89 +464,54 @@ namespace Searcher
             }
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+
+
+        #region ToolTips
+        private void dgvHighlights_MouseHover(object sender, EventArgs e)
         {
-            try
-            {
-                if (_properties.ShowDialog() == DialogResult.OK)
-                {
-                    EnforceSettings();
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Error setting settings:" + x.Message);
-            }
+            if (!dgvHighlights.Visible || dgvHighlights.RowCount == 0) { return; }
+            ShowToolTip(dgvHighlights, "Double click row to search files.");
         }
-
-        void EnforceSettings()
+        private void dgvFind_MouseHover(object sender, EventArgs e)
         {
-            //TODO: FONT
-
-            if(!_properties.showRightPanel)
-            {
-                spltTextViewer.Panel2Collapsed = true;
-                spltTextViewer.Panel2.Hide();
-            }
-            else
-            {
-                spltTextViewer.Panel2Collapsed = false;
-                spltTextViewer.Panel2.Show();
-            }
-
-
+            if (!dgvFind.Visible || dgvFind.RowCount == 0) { return; }
+            ShowToolTip(dgvFind, "Double click row to go to location.");
         }
 
-        private void languageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tabFiles_MouseHover(object sender, EventArgs e)
         {
-            try
-            {
-                if (_languageSyntax.ShowDialog() == DialogResult.OK)
-                {
-                    //do language syntax
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show("Error setting settings:" + x.Message);
-            }
+            ShowToolTip(tabFiles, "Middle click to close tab.");
         }
 
-        private void dgvHighlights_DoubleClick(object sender, EventArgs e)
+        private void dgvFind_MouseLeave(object sender, EventArgs e)
         {
-            var rows = (sender as DataGridView)?.SelectedRows;
-            if (rows?.Count == 1)
-            {
-                txtFind.Text = rows[0].Cells[0].Value.ToString();
-                FindHits.Rows.Clear();
-
-                for (var i = 0; i < tabFiles.TabCount; i++)
-                {
-                    FindInTab(i);
-                }
-            }
+            HideToolTip();
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("Tabbed Text Viewer made for reviewing Search Results.\r\nUses 'Fast Color Text Box'", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        private void dgvHighlights_MouseLeave(object sender, EventArgs e)
+        {
+            HideToolTip();
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
-            try {
-                var ftb = (FancyTextBox)tabFiles.SelectedTab.Controls[0];
-                File.WriteAllText(ftb.FilePath, ftb.Text);
-            }
-            catch (Exception x) {
-                MessageBox.Show("Error Saving File:"+x.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        private void tabFiles_MouseLeave(object sender, EventArgs e)
+        {
+            HideToolTip();
         }
 
-        private void closeTabToolStripMenuItem_Click(object sender, EventArgs e) {
-            CloseTab(tabFiles.SelectedIndex);
+
+        private void ShowToolTip(Control control, string text)
+        {
+            if (!_showToolTip) { return; }
+
+            text += "\r\n\r\n (Disable tooltips in ROOSFAFS setttings)";
+            var p = new Point(control.Location.X + control.Width, control.Location.Y + (control.Height / 5));
+            toolTip.Show(text, control, p);
         }
 
-        private void closeWindowToolStripMenuItem_Click(object sender, EventArgs e) {
-            Close();
+        private void HideToolTip()
+        {
+            toolTip.Hide(this);
         }
+        #endregion
     }
 }
