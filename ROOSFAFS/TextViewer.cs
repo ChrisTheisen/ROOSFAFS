@@ -16,7 +16,7 @@ namespace Searcher
     {
         private readonly TextViewerSettingsForm _properties = new TextViewerSettingsForm();
         private readonly LanguageSyntax _languageSyntax = new LanguageSyntax();
-        private List<HighlightSearch> Highlights
+        private List<HighlightSearch> _highlights
         {
             get
             {
@@ -49,17 +49,6 @@ namespace Searcher
             }
         }
 
-        public void ShowContexts(string title, List<FileContext> matchFiles, string searchString, bool isRegex, bool showToolTips)
-        {
-            Text = title;
-            _showToolTip = showToolTips;
-
-            Show();
-            AddHilighter(searchString, Color.Red, SystemColors.Control);
-            dgvHighlights.ClearSelection();
-            txtNewHilight.Focus();
-        }
-
         public void ShowFiles(string title, List<string> filePaths, string searchString, bool showToolTips)
         {
             Show();
@@ -67,16 +56,18 @@ namespace Searcher
 
             _showToolTip = showToolTips;
             Text = title;
-            IntPtr intPtr = tabFiles.Handle;
+
             foreach (var filePath in filePaths)
             {
                 var fi = new FileInfo(filePath);
                 if (!fi.Exists) continue;
 
                 var tp = new TabPage(fi.Name);
-                
-                FancyTextBox ftb = new FancyTextBox(fi.FullName, Highlights);
-                ftb.Dock = DockStyle.Fill;
+
+                FancyTextBox ftb = new FancyTextBox(fi.FullName, _highlights)
+                {
+                    Dock = DockStyle.Fill
+                };
                 tp.Controls.Add(ftb);
 
                 if (tabFiles.TabCount == 0) { tabFiles.TabPages.Add(tp); }
@@ -88,24 +79,7 @@ namespace Searcher
             txtNewHilight.Focus();
         }
 
-        private void Btn_Click(object sender, EventArgs e)
-        {
-            var temp = ((Button)sender).Parent.Controls.Find("txt", false);
-            if(temp.Length > 0)
-            {
-                var txt = temp[0] as TextBox;
-                var argument = "/select, \"" + txt.Text + "\"";
-                System.Diagnostics.Process.Start("explorer.exe", argument);
-
-            }
-        }
-
-        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _properties.Show();
-        }
-       
-        void EnforceSettings()
+        private void enforceSettings()
         {
             //TODO: FONT
 
@@ -125,7 +99,7 @@ namespace Searcher
         #endregion
 
         #region hilights
-        private void LblSample_MouseClick(object sender, MouseEventArgs e)
+        private void lblSample_MouseClick(object sender, MouseEventArgs e)
         {
             switch (e.Button)
             {
@@ -171,7 +145,7 @@ namespace Searcher
 	        }
         }
 
-        private void BtnAddHilight_Click(object sender, EventArgs e)
+        private void btnAddHilight_Click(object sender, EventArgs e)
         {
             AddHilighter(txtNewHilight.Text, lblSample.ForeColor, lblSample.BackColor);
         }
@@ -199,42 +173,35 @@ namespace Searcher
 
             lblCounter.Text = Highlighters.Rows.Count + @"/15";
             txtNewHilight.Text = null;
-            FixGridColumnWidths(dgvHighlights);
-
-            var hs = new HighlightSearch
-            {
-                BackColor = backColor,
-                ForeColor = foreColor,
-                Key = searchString
-            };
-            HilightTab();
+            fixGridColumnWidths(dgvHighlights);
+            hilightTab();
         }
 
-        private void HilightTab()
+        private void hilightTab()
         {
             foreach (TabPage tab in tabFiles.TabPages)
             {
                 var ftb = tab.Controls.Find("FancyTextBox", false)[0] as FancyTextBox;
-                ftb.SetHighlights(Highlights);
+                ftb.SetHighlights(_highlights);
             }
         }
 
-        private void TxtNewHilight_TextChanged(object sender, EventArgs e)
+        private void txtNewHilight_TextChanged(object sender, EventArgs e)
         {
             lblSample.Text = txtNewHilight.Text;
         }
 
-        private void TabFiles_TabIndexChanged(object sender, EventArgs e)
+        private void tabFiles_TabIndexChanged(object sender, EventArgs e)
         {
-            HilightTab();
+            hilightTab();
         }
 
-        private void BtnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object sender, EventArgs e)
         {
-            RemoveSelected();
+            removeSelected();
         }
 
-        private void RemoveSelected()
+        private void removeSelected()
         {
             foreach (DataGridViewRow row in dgvHighlights.SelectedRows)
             {
@@ -243,51 +210,51 @@ namespace Searcher
 
             dgvHighlights.ClearSelection();
             lblCounter.Text = Highlighters.Rows.Count + @"/15";
-            FixGridColumnWidths(dgvHighlights);
+            fixGridColumnWidths(dgvHighlights);
 
-            HilightTab();
+            hilightTab();
         }
         #endregion
 
         #region find/replace
-        private void BtnFind_Click(object sender, EventArgs e)
+        private void btnFind_Click(object sender, EventArgs e)
         {
             FindHits.Rows.Clear();
 
-            FindInTab(tabFiles.SelectedIndex);
+            findInTab(tabFiles.SelectedIndex);
         }
 
-        private void BtnFindAllTabs_Click(object sender, EventArgs e)
+        private void btnFindAllTabs_Click(object sender, EventArgs e)
         {
             FindHits.Rows.Clear();
 
             for (var i = 0; i < tabFiles.TabCount; i++)
             {
-                FindInTab(i);
+                findInTab(i);
             }
         }
 
-        private void DgvFind_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvFind_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) { return; }
-            SelectFind(e.RowIndex);
+            selectFind(e.RowIndex);
         }
         private void dgvFind_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e) {
             if (e.RowIndex < 0) { return; }
-            SelectFind(e.RowIndex);
+            selectFind(e.RowIndex);
         }
 
-        private void SelectFind(int index) {
+        private void selectFind(int index) {
             //find tab
             var tabIndex = int.Parse(dgvFind.Rows[index].Cells["#"].Value.ToString());
 
             //find location in text.
             var line = int.Parse(dgvFind.Rows[index].Cells["Line"].Value.ToString());
             var col = int.Parse(dgvFind.Rows[index].Cells["Col"].Value.ToString());
-            GoTo(tabIndex, line, col);
+            goTo(tabIndex, line, col);
         }
 
-        private void FindInTab(int tabIndex)
+        private void findInTab(int tabIndex)
         {
             var ftb = (FancyTextBox)tabFiles.TabPages[tabIndex].Controls[0];
 
@@ -307,10 +274,10 @@ namespace Searcher
 
                 FindHits.Rows.Add(dataRow);
             }
-            FixGridColumnWidths(dgvFind);
+            fixGridColumnWidths(dgvFind);
         }
 
-        private void FixGridColumnWidths(DataGridView input)
+        private void fixGridColumnWidths(DataGridView input)
         {
             foreach (DataGridViewColumn col in input.Columns)
             {
@@ -324,7 +291,7 @@ namespace Searcher
             }
         }
 
-        private void GoTo(int tabIndex, int line, int Char)
+        private void goTo(int tabIndex, int line, int Char)
         {
             line -= 1;
             if(tabIndex < 0 || line < 0 || Char < 0) { return; }
@@ -351,7 +318,7 @@ namespace Searcher
             {
                 if (_properties.ShowDialog() == DialogResult.OK)
                 {
-                    EnforceSettings();
+                    enforceSettings();
                 }
             }
             catch (Exception x)
@@ -384,7 +351,7 @@ namespace Searcher
 
                 for (var i = 0; i < tabFiles.TabCount; i++)
                 {
-                    FindInTab(i);
+                    findInTab(i);
                 }
             }
         }
@@ -409,7 +376,7 @@ namespace Searcher
 
         private void closeTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CloseTab(tabFiles.SelectedIndex);
+            closeTab(tabFiles.SelectedIndex);
         }
 
         private void closeWindowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -419,7 +386,7 @@ namespace Searcher
 
 
         #endregion
-        private void TabFiles_MouseDown(object sender, MouseEventArgs e)
+        private void tabFiles_MouseDown(object sender, MouseEventArgs e)
         {
             if (!(sender is TabControl tc)) return;
             if (e.Button != MouseButtons.Middle) return;
@@ -428,13 +395,13 @@ namespace Searcher
             {
                 var rect = tc.GetTabRect(i);
                 if (!rect.Contains(e.Location)) continue;
-                CloseTab(i);
-                FixSearchResults(i);
+                closeTab(i);
+                fixSearchResults(i);
                 break;
             }
         }
 
-        private void CloseTab(int index)
+        private void closeTab(int index)
         {
             if (!_properties.confirmCloseTab
                 || MessageBox.Show(@"Would you like to Close this Tab?", @"Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -443,7 +410,7 @@ namespace Searcher
             }
         }
 
-        private void FixSearchResults(int index)
+        private void fixSearchResults(int index)
         {
             for (var i = 0; i < FindHits.Rows.Count; i++)
             {
@@ -470,36 +437,36 @@ namespace Searcher
         private void dgvHighlights_MouseHover(object sender, EventArgs e)
         {
             if (!dgvHighlights.Visible || dgvHighlights.RowCount == 0) { return; }
-            ShowToolTip(dgvHighlights, "Double click row to search files.");
+            showToolTip(dgvHighlights, "Double click row to search files.");
         }
         private void dgvFind_MouseHover(object sender, EventArgs e)
         {
             if (!dgvFind.Visible || dgvFind.RowCount == 0) { return; }
-            ShowToolTip(dgvFind, "Double click row to go to location.");
+            showToolTip(dgvFind, "Double click row to go to location.");
         }
 
         private void tabFiles_MouseHover(object sender, EventArgs e)
         {
-            ShowToolTip(tabFiles, "Middle click to close tab.");
+            showToolTip(tabFiles, "Middle click to close tab.");
         }
 
         private void dgvFind_MouseLeave(object sender, EventArgs e)
         {
-            HideToolTip();
+            hideToolTip();
         }
 
         private void dgvHighlights_MouseLeave(object sender, EventArgs e)
         {
-            HideToolTip();
+            hideToolTip();
         }
 
         private void tabFiles_MouseLeave(object sender, EventArgs e)
         {
-            HideToolTip();
+            hideToolTip();
         }
 
 
-        private void ShowToolTip(Control control, string text)
+        private void showToolTip(Control control, string text)
         {
             if (!_showToolTip) { return; }
 
@@ -508,7 +475,7 @@ namespace Searcher
             toolTip.Show(text, control, p);
         }
 
-        private void HideToolTip()
+        private void hideToolTip()
         {
             toolTip.Hide(this);
         }

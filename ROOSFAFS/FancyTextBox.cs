@@ -14,62 +14,34 @@ using System.Text.RegularExpressions;
 
 namespace Searcher {
     public partial class FancyTextBox : UserControl {
-        private List<int> lineHeights = new List<int>();
-
         public FancyTextBox() {
             InitializeComponent();
-            Highlighters = new List<HighlightSearch>();
+            _highlighters = new List<HighlightSearch>();
         }
 
         public FancyTextBox(string filePath) {
             InitializeComponent();
-            _filePath = filePath;
-            Highlighters = new List<HighlightSearch>();
+            FilePath = filePath;
+            _highlighters = new List<HighlightSearch>();
 
             loadFileContents();
         }
 
         public FancyTextBox(string filePath, List<HighlightSearch> highlighters) {
             InitializeComponent();
-            _filePath = filePath;
-            Highlighters = highlighters;
+            FilePath = filePath;
+            _highlighters = highlighters;
 
             loadFileContents();
         }
 
 
-        private string _filePath { get; set; }
-        public string FilePath { get { return _filePath; } }
-        private List<HighlightSearch> Highlighters { get; set; }
+        public string FilePath { get; private set; }
+
+        private List<HighlightSearch> _highlighters { get; set; }
         public RichTextBox RichTextBox { get { return rtbContent; } }
 
         public override string Text { get { return rtbContent.Text; } set { rtbContent.Text = value; } }
-
-        private void generateLineNumbersOBD()
-        {
-            var totalHeight = 0;
-            for (var i = 0; i < rtbContent.Lines.Length; i++)
-            {
-                var lHeight = rtbContent.Font.Height;
-                var lbl = new Label
-                {
-                    Name = $"lbl{i}",
-                    Text = (i + 1).ToString(),
-                    Location = new Point(0, totalHeight),
-                    Font = rtbContent.Font,
-                    Padding = new Padding(0),
-                    Height = lHeight,
-                    Width = pnlLineNumbers.Width,
-                    TextAlign = ContentAlignment.TopRight
-                };
-
-                pnlLineNumbers.Controls.Add(lbl);
-
-                totalHeight += lHeight;
-                lineHeights.Add(totalHeight);
-            }
-            pnlLineNumbers.VerticalScroll.Maximum = totalHeight;
-        }
 
         private void generateLineNumbers()
         {
@@ -120,6 +92,20 @@ namespace Searcher {
             }
 
             //hack to keep line numbers inline with text. Otherwise sometimes it is a fraction of a line off.
+            /*
+             Try this at some point:
+                using System.Runtime.InteropServices;
+
+                .......................................
+
+                [DllImport("user32.dll")]
+                static extern int SendMessage(IntPtr hWnd, uint wMsg, UIntPtr wParam, IntPtr lParam);
+
+                .......................................
+
+                SendMessage(myRichTextBox.Handle, (uint)0x00B6, (UIntPtr)0, (IntPtr)(-1));
+
+             */
             var caret = rtbContent.GetFirstCharIndexFromLine(first);
             if (caret == -1) return;
             rtbContent.Focus();
@@ -127,13 +113,13 @@ namespace Searcher {
         }
 
         private void loadFileContents() {
-            var fi = new FileInfo(_filePath);
+            var fi = new FileInfo(FilePath);
             if (!fi.Exists) {
                 MessageBox.Show("File Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            txtPath.Text = _filePath;
-            Text = File.ReadAllText(_filePath);
+            txtPath.Text = FilePath;
+            Text = File.ReadAllText(FilePath);
             Highlight();
             rtbContent.Select(0, 0);
 
@@ -143,27 +129,29 @@ namespace Searcher {
         }
 
         private void btnFindInFolder_Click(object sender, EventArgs e) {
-            var argument = "/select, \"" + _filePath + "\"";
+            var argument = "/select, \"" + FilePath + "\"";
             System.Diagnostics.Process.Start("explorer.exe", argument);
         }
 
         public void SetHighlights(List<HighlightSearch> input)
         {
-            Highlighters = input;
+            _highlighters = input;
             Highlight();
         }
 
         public void Highlight() {
             int pos = rtbContent.SelectionStart;
-            RichTextBox buffer = new RichTextBox();
-            buffer.Rtf = rtbContent.Rtf;
+            RichTextBox buffer = new RichTextBox
+            {
+                Rtf = rtbContent.Rtf
+            };
 
             buffer.SelectAll();
             buffer.SelectionColor = Color.Black;
             buffer.SelectionBackColor = Color.White;
             buffer.DeselectAll();
 
-            foreach (var highlight in this.Highlighters) {
+            foreach (var highlight in this._highlighters) {
                 var matches = Regex.Matches(rtbContent.Text, highlight.Key);
 
                 foreach (System.Text.RegularExpressions.Match match in matches) {
@@ -202,6 +190,11 @@ namespace Searcher {
         private void rtbContent_Resize(object sender, EventArgs e)
         {
             generateLineNumbers();
+        }
+
+        private void btnCopyPath_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtPath.Text);
         }
     }
 }

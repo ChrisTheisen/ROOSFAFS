@@ -173,9 +173,9 @@
             this.tabFiles.SelectedIndex = 0;
             this.tabFiles.Size = new System.Drawing.Size(730, 438);
             this.tabFiles.TabIndex = 0;
-            this.tabFiles.SelectedIndexChanged += new System.EventHandler(this.TabFiles_TabIndexChanged);
-            this.tabFiles.TabIndexChanged += new System.EventHandler(this.TabFiles_TabIndexChanged);
-            this.tabFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TabFiles_MouseDown);
+            this.tabFiles.SelectedIndexChanged += new System.EventHandler(this.tabFiles_TabIndexChanged);
+            this.tabFiles.TabIndexChanged += new System.EventHandler(this.tabFiles_TabIndexChanged);
+            this.tabFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabFiles_MouseDown);
             this.tabFiles.MouseLeave += new System.EventHandler(this.tabFiles_MouseLeave);
             this.tabFiles.MouseHover += new System.EventHandler(this.tabFiles_MouseHover);
             // 
@@ -250,7 +250,7 @@
             this.btnDelete.TabIndex = 4;
             this.btnDelete.Text = "Delete Selected";
             this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // txtNewHilight
             // 
@@ -259,7 +259,7 @@
             this.txtNewHilight.Name = "txtNewHilight";
             this.txtNewHilight.Size = new System.Drawing.Size(273, 20);
             this.txtNewHilight.TabIndex = 0;
-            this.txtNewHilight.TextChanged += new System.EventHandler(this.TxtNewHilight_TextChanged);
+            this.txtNewHilight.TextChanged += new System.EventHandler(this.txtNewHilight_TextChanged);
             // 
             // lblSample
             // 
@@ -269,7 +269,7 @@
             this.lblSample.Size = new System.Drawing.Size(42, 13);
             this.lblSample.TabIndex = 3;
             this.lblSample.Text = "Sample";
-            this.lblSample.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LblSample_MouseClick);
+            this.lblSample.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lblSample_MouseClick);
             // 
             // btnAddHilight
             // 
@@ -281,7 +281,7 @@
             this.btnAddHilight.TabIndex = 2;
             this.btnAddHilight.Text = "Add Hilight";
             this.btnAddHilight.UseVisualStyleBackColor = true;
-            this.btnAddHilight.Click += new System.EventHandler(this.BtnAddHilight_Click);
+            this.btnAddHilight.Click += new System.EventHandler(this.btnAddHilight_Click);
             // 
             // pnlFind
             // 
@@ -306,7 +306,7 @@
             this.btnFindAllTabs.TabIndex = 8;
             this.btnFindAllTabs.Text = "Find in All Tabs";
             this.btnFindAllTabs.UseVisualStyleBackColor = true;
-            this.btnFindAllTabs.Click += new System.EventHandler(this.BtnFindAllTabs_Click);
+            this.btnFindAllTabs.Click += new System.EventHandler(this.btnFindAllTabs_Click);
             // 
             // dgvFind
             // 
@@ -325,7 +325,7 @@
             this.dgvFind.ShowCellToolTips = false;
             this.dgvFind.Size = new System.Drawing.Size(270, 173);
             this.dgvFind.TabIndex = 0;
-            this.dgvFind.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFind_CellClick);
+            this.dgvFind.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFind_CellClick);
             this.dgvFind.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFind_CellContentDoubleClick);
             this.dgvFind.MouseLeave += new System.EventHandler(this.dgvFind_MouseLeave);
             this.dgvFind.MouseHover += new System.EventHandler(this.dgvFind_MouseHover);
@@ -339,7 +339,7 @@
             this.btnFind.TabIndex = 4;
             this.btnFind.Text = "Find";
             this.btnFind.UseVisualStyleBackColor = true;
-            this.btnFind.Click += new System.EventHandler(this.BtnFind_Click);
+            this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
             // 
             // txtFind
             // 

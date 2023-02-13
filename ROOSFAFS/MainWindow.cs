@@ -46,66 +46,55 @@ namespace Searcher
         }
 
         #region Events
-        private void BtnContext_Click(object sender, EventArgs e)
+        private void btnCopyFiles_Click(object sender, EventArgs e)
         {
             try
             {
-                ViewSelectedContext();
+                selectedToClipboard();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
-            }
-        }
-        private void BtnCopyFiles_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SelectedToClipboard();
-            }
-            catch (Exception x)
-            {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
 
-        private void BtnFilter_Click(object sender, EventArgs e)
+        private void btnFilter_Click(object sender, EventArgs e)
         {
             try
             {
-                PrepFilter();
+                prepFilter();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
 
-        private void BtnFindInFolder_Click(object sender, EventArgs e)
+        private void btnFindInFolder_Click(object sender, EventArgs e)
         {
             try
             {
-                FindFilesInFolder();
+                findFilesInFolder();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
 
-        private void BtnRemove_Click(object sender, EventArgs e)
+        private void btnRemove_Click(object sender, EventArgs e)
         {
             try
             {
-                HideSelectedRows();
+                hideSelectedRows();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
 
-        private void BtnRestore_Click(object sender, EventArgs e)
+        private void btnRestore_Click(object sender, EventArgs e)
         {
             try
             {
@@ -116,10 +105,10 @@ namespace Searcher
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void BtnRootFolder_Click(object sender, EventArgs e)
+        private void btnRootFolder_Click(object sender, EventArgs e)
         {
             try
             {
@@ -131,21 +120,21 @@ namespace Searcher
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void BtnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             try
             {
-                PrepSearch();
+                prepSearch();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void BtnStop_Click(object sender, EventArgs e)
+        private void btnStop_Click(object sender, EventArgs e)
         {
             try
             {
@@ -154,73 +143,73 @@ namespace Searcher
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void BtnView_Click(object sender, EventArgs e)
+        private void btnView_Click(object sender, EventArgs e)
         {
             try
             {
-                ViewSelectedItems();
+                viewSelectedItems();
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowSettings();
+            showSettings();
         }
-        private void TxtSearchString_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    PrepSearch();
-                }
-            }
-            catch (Exception x)
-            {
-                AddError(x.Message);
-            }
-        }
-        private void TxtFilter_KeyDown(object sender, KeyEventArgs e)
+        private void txtSearchString_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    PrepFilter();
+                    prepSearch();
                 }
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
-        private void GrdResults_KeyDown(object sender, KeyEventArgs e)
+        private void txtFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    prepFilter();
+                }
+            }
+            catch (Exception x)
+            {
+                addError(x.Message);
+            }
+        }
+        private void grdResults_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Delete:
-                    HideSelectedRows();
+                    hideSelectedRows();
                     break;
                 case Keys.Enter:
-                    ViewSelectedItems();
+                    viewSelectedItems();
                     break;
 
             }
         }
         #endregion
         #region private
-        private void PrepSearch()
+        private void prepSearch()
         {
             txtSearchString.BackColor = Color.White;
             if (string.IsNullOrEmpty(txtRootFolder.Text) || string.IsNullOrEmpty(txtSearchString.Text))
@@ -233,7 +222,7 @@ namespace Searcher
                 }
                 catch (Exception x)
                 {
-                    AddError("Invalid Regex: " + x.Message);
+                    addError("Invalid Regex: " + x.Message);
                     txtSearchString.BackColor = Color.Red;
                     return;
                 }
@@ -241,7 +230,7 @@ namespace Searcher
 
             _startTime = DateTime.Now;
             lblStart.Text = $@"Start Search: {_startTime:HH:mm:ss}";
-            AddInfo(lblStart.Text);
+            addInfo(lblStart.Text);
             lblStopped.Text = string.Empty;
             lblDuration.Text = string.Empty;
 
@@ -275,7 +264,7 @@ namespace Searcher
 
             var sp = new SearchParameters(ct)
             {
-                SearchType = SelectedSearchType,
+                SearchType = _selectedSearchType,
                 IsRecursive = chkRecursive.Checked,
                 IsRegex = chkSearchRegex.Checked,
                 RootFolder = txtRootFolder.Text,
@@ -283,7 +272,13 @@ namespace Searcher
                 SearchExtension = searchExt,
                 SkipExtension = skipExt,
                 SkipFolder = skipFolder,
-                StopAfterN = chkStopAfterN.Checked ? (int?)numStopAfterN.Value : null
+                StopAfterN = (int)numStopAfterN.Value,
+                AccessMin = dateAccessedMin.Value,
+                AccessMax = dateAccessedMax.Value,
+                WriteMin = dateWriteMin.Value,
+                WriteMax = dateWriteMax.Value,
+                SizeMin = numSizeMin.Value,
+                SizeMax = numSizeMax.Value                
             };
 
             txtFilter.Text = null;
@@ -302,11 +297,11 @@ namespace Searcher
             btnStop.Enabled = true;
             btnStop.BackColor = Color.Red;
             btnStop.Focus();
-            SetDataColumns();
+            setDataColumns();
 
-            Task.Run(() => DoSearch(sp), ct);
+            Task.Run(() => doSearch(sp), ct);
         }
-        private void HideSelectedRows()
+        private void hideSelectedRows()
         {
             var selected = new List<int>();
             foreach (DataGridViewRow row in grdResults.SelectedRows)
@@ -322,7 +317,7 @@ namespace Searcher
 
             grdResults.ClearSelection();
         }
-        private void DoSearch(object o)
+        private void doSearch(object o)
         {
             var failedFiles = new Dictionary<string, Exception>();
 
@@ -331,24 +326,24 @@ namespace Searcher
             Utility.SearchFolder(sp, failedFiles, _matches, lblStatus, lblCount);
 
             _searchHistories.Add(new SearchHistory(sp, _matches, _stop));
-            UpdateHistory();
+            updateHistory();
 
-            PostSearchUiCleanup(failedFiles);
+            postSearchUiCleanup(failedFiles);
         }
-        private void PostSearchUiCleanup(Dictionary<string, Exception> failedFiles)
+        private void postSearchUiCleanup(Dictionary<string, Exception> failedFiles)
         {
             foreach (var key in failedFiles.Keys)
             {
-                AddWarning($"Skipped {key}: {failedFiles[key]}");
+                addWarning($"Skipped {key}: {failedFiles[key]}");
             }
-            PopulateRows();
+            populateRows();
 
             MultiThread.SetProperty(btnSearch, "Enabled", true);
             MultiThread.UpdateToolStripStatus(lblStatus, _stop ? $"Stopped: {_dataSource.Rows.Count} hits" : $"Done: {_dataSource.Rows.Count} hits");
             var endTime = DateTime.Now;
             var duration = endTime - _startTime;
             MultiThread.UpdateToolStripStatus(lblStopped, $@"Stop Search: {endTime:HH:mm:ss}");
-            AddInfo($@"Stop Search: {endTime:HH:mm:ss}");
+            addInfo($@"Stop Search: {endTime:HH:mm:ss}");
             MultiThread.UpdateToolStripStatus(lblDuration, $@"Duration: {duration.TotalSeconds}s");
 
 
@@ -388,7 +383,7 @@ namespace Searcher
             MultiThread.InvokeMethod(grdResults, "Focus", null);
         }
 
-        private void PrepFilter()
+        private void prepFilter()
         {
             grdResults.ClearSelection();
 
@@ -402,7 +397,7 @@ namespace Searcher
 
             var sp = new SearchParameters(ct)
             {
-                SearchType = SelectedFilterType,
+                SearchType = _selectedFilterType,
                 IsRecursive = false,
                 IsRegex = chkFilterRegex.Checked,
                 RootFolder = "GRID",
@@ -410,13 +405,13 @@ namespace Searcher
                 SearchExtension = null,
                 SkipExtension = null,
                 SkipFolder = null,
-                StopAfterN = null
+                StopAfterN = 1000
             };
-            AddInfo($@"Start Filter: {_startTime:HH:mm:ss}");
+            addInfo($@"Start Filter: {_startTime:HH:mm:ss}");
 
-            Task.Run(() => DoFilter(sp), ct);
+            Task.Run(() => doFilter(sp), ct);
         }
-        private void DoFilter(SearchParameters sp)
+        private void doFilter(SearchParameters sp)
         {
             foreach (DataGridViewRow row in grdResults.Rows)
             {
@@ -441,10 +436,10 @@ namespace Searcher
                 }
             }
 
-            PostFilterUiCleanup();
+            postFilterUiCleanup();
 
         }
-        private void PostFilterUiCleanup()
+        private void postFilterUiCleanup()
         {
             foreach (Control c in Controls)
             {
@@ -453,10 +448,10 @@ namespace Searcher
             MultiThread.SetProperty(btnStop, "Enabled", false);
             MultiThread.SetProperty(btnStop, "BackColor", SystemColors.Control);
 
-            AddInfo($@"End Filter: {_startTime:HH:mm:ss}");
+            addInfo($@"End Filter: {_startTime:HH:mm:ss}");
         }
 
-        private void ViewSelectedItems()
+        private void viewSelectedItems()
         {
             var files = new List<string>();
             foreach (DataGridViewRow row in grdResults.SelectedRows)
@@ -481,8 +476,8 @@ namespace Searcher
                     }
                     catch (Exception x)
                     {
-                        AddError($"Error opening text Text Editor '{_properties.TextEditor}'");
-                        AddError(x.Message);
+                        addError($"Error opening text Text Editor '{_properties.TextEditor}'");
+                        addError(x.Message);
                         break;
                     }
                 }
@@ -494,104 +489,8 @@ namespace Searcher
             }
 
         }
-        private void ViewSelectedContext()
-        {
-            var matchFiles = new List<FileContext>();
-            const string title = "Context";
-            var searchString = txtSearchString.Text;
-            var c = 0;
-            var mc = 0;
 
-            foreach (DataGridViewRow row in grdResults.Rows)
-            {
-                if (!row.Visible) { continue; }
-
-                var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
-                var matchLines = chkSearchRegex.Checked ? GetFileContextsRegex(filePath) : GetFileContexts(filePath);
-                matchFiles.Add(GetContexts(matchLines, filePath, _properties.ContextSize));
-
-                mc += matchLines.Length;
-                // ReSharper disable once LocalizableElement
-                lblStatus.Text = $"{++c} files searched; {mc} total matches";
-            }
-
-            var tv = new TextViewer();
-            tv.ShowContexts(title, matchFiles, searchString, chkSearchRegex.Checked, _properties.ShowToolTip);
-        }
-        private int[] GetFileContexts(string filePath)
-        {
-            var matchLines = new List<int>();
-            var tempSearch = txtSearchString.Text;
-            var lineNum = 0;
-
-            using (var sr = new StreamReader(filePath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    lineNum++;
-                    if (string.IsNullOrEmpty(line)) continue;
-
-                    if (line.Contains(tempSearch))
-                    {
-                        matchLines.Add(lineNum);
-                    }
-                }
-            }
-
-            return matchLines.ToArray();
-        }
-        private int[] GetFileContextsRegex(string filePath)
-        {
-            var matchLines = new List<int>();
-            var searchString = txtSearchString.Text;
-            var lineNum = 0;
-
-            using (var sr = new StreamReader(filePath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    lineNum++;
-                    if (string.IsNullOrEmpty(line)) continue;
-
-                    if (Regex.IsMatch(line, searchString))
-                    {
-                        matchLines.Add(lineNum);
-                    }
-                }
-            }
-
-            return matchLines.ToArray();
-        }
-        private static FileContext GetContexts(IList<int> matchLines, string filePath, int contextLines)
-        {
-            var output = new FileContext(filePath);
-            var halfContext = contextLines / 2;
-            for (var i = 0; i < matchLines.Count; i++) { matchLines[i] = Math.Max(0, matchLines[i] - halfContext); }
-
-            var lineNum = 0;
-            using (var sr = new StreamReader(filePath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    lineNum++;
-                    var line = sr.ReadLine();
-                    if (matchLines.Contains(lineNum)) { output.Chunks.Add(new ContextGroup()); }
-
-                    foreach (var chunk in output.Chunks)
-                    {
-                        if (chunk.Lines.Count < contextLines)
-                        {
-                            chunk.Lines.Add(new ContextLine(lineNum, line));
-                        }
-                    }
-                }
-            }
-            return output;
-        }
-
-        private void FindFilesInFolder()
+        private void findFilesInFolder()
         {
             var c = 0;
             foreach (DataGridViewRow row in grdResults.SelectedRows)
@@ -601,15 +500,13 @@ namespace Searcher
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
                 if (!File.Exists(filePath)) continue;
 
-                // combine the arguments together
                 var argument = "/select, \"" + filePath + "\"";
                 System.Diagnostics.Process.Start("explorer.exe", argument);
                 c++;
             }
-            // ReSharper disable once LocalizableElement
             lblStatus.Text = c + " File Locations Opened.";
         }
-        private void SelectedToClipboard()
+        private void selectedToClipboard()
         {
             var filePaths = new System.Collections.Specialized.StringCollection();
             foreach (DataGridViewRow row in grdResults.SelectedRows)
@@ -619,16 +516,14 @@ namespace Searcher
                 var filePath = Path.Combine(row.Cells["Directory"].Value.ToString(), row.Cells["Name"].Value.ToString());
                 if (!File.Exists(filePath)) continue;
 
-                // combine the arguments together
                 filePaths.Add(filePath);
             }
 
             Clipboard.SetFileDropList(filePaths);
-            // ReSharper disable once LocalizableElement
             lblStatus.Text = filePaths.Count + " Files copied to clipboard";
         }
 
-        private void SetDataColumns()
+        private void setDataColumns()
         {
             var hiddenRows = (from DataGridViewRow row in grdResults.Rows where !row.Visible select row.Index).ToList();
             _dataSource.Columns.Clear();
@@ -653,7 +548,7 @@ namespace Searcher
 
                 _dataSource.Columns.Add(column, type);
             }
-            PopulateRows();
+            populateRows();
             grdResults.CurrentCell = null;
             foreach (var i in hiddenRows)
             {
@@ -662,22 +557,17 @@ namespace Searcher
             }
         }
 
-        private void PopulateRows()
+        private void populateRows()
         {
             _dataSource.Rows.Clear();
             foreach (var match in _matches)
             {
                 var newRow = _dataSource.NewRow();
-                new RowData(match, SelectedSearchType).BuildRow(newRow, _dataSource.Columns, match.FirstMatch);
+                new RowData(match, _selectedSearchType).BuildRow(newRow, _dataSource.Columns, match.FirstMatch);
                 _dataSource.Rows.Add(newRow);
             }
         }
-        private void ChkStopAfterN_CheckedChanged(object sender, EventArgs e)
-        {
-            numStopAfterN.Enabled = chkStopAfterN.Checked;
-        }
-
-        private SearchType SelectedSearchType
+        private SearchType _selectedSearchType
         {
             get
             {
@@ -688,7 +578,7 @@ namespace Searcher
             }
         }
 
-        private SearchType SelectedFilterType
+        private SearchType _selectedFilterType
         {
             get
             {
@@ -698,23 +588,23 @@ namespace Searcher
             }
         }
 
-        private void ShowSettings()
+        private void showSettings()
         {
             try
             {
                 if (_properties.ShowDialog() == DialogResult.OK)
                 {
-                    SetDataColumns();
+                    setDataColumns();
                 }
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
 
         }
 
-        private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+        private void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
             TabPage page = tabControl.TabPages[e.Index];
             if (e.Index == 3 && (_newErrors || _newWarnings))
@@ -740,7 +630,7 @@ namespace Searcher
             TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, page.ForeColor);
         }
 
-        private void TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl.SelectedIndex == 3)
             {
@@ -749,7 +639,7 @@ namespace Searcher
             }
         }
 
-        private void ShowToolTip(Control control, string text)
+        private void showToolTip(Control control, string text)
         {
             if (!_properties.ShowToolTip) { return; }
 
@@ -759,7 +649,7 @@ namespace Searcher
             toolTip.Show(text, control, p);
         }
 
-        private void HideToolTip()
+        private void hideToolTip()
         {
             toolTip.Hide(this);
         }
@@ -767,7 +657,7 @@ namespace Searcher
         #endregion
 
         #region logging
-        private void AddLog(string message, LogType logType)
+        private void addLog(string message, LogType logType)
         {
             Color lineColor;
 
@@ -822,25 +712,25 @@ namespace Searcher
             MultiThread.InvokeMethod(rtbLog, "Select", new object[] { 0, 0 });
         }
 
-        private void AddInfo(string message)
+        private void addInfo(string message)
         {
-            AddLog(message, LogType.Info);
+            addLog(message, LogType.Info);
         }
 
-        private void AddWarning(string message)
+        private void addWarning(string message)
         {
-            AddLog(message, LogType.Warning);
+            addLog(message, LogType.Warning);
         }
 
-        private void AddError(string message)
+        private void addError(string message)
         {
-            AddLog(message, LogType.Error);
+            addLog(message, LogType.Error);
         }
         #endregion
 
         #region history
 
-        private void UpdateHistory()
+        private void updateHistory()
         {
             Action action = () =>
             {
@@ -858,7 +748,7 @@ namespace Searcher
             }
         }
 
-        private void LstSearchHistory_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void lstSearchHistory_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var hi = (SearchHistory)lstSearchHistory.SelectedItem;
             if (hi == null) { return; }
@@ -890,12 +780,11 @@ namespace Searcher
 
 
             txtSearchExtension.Text = string.Join(", ", hi.SearchParameters.SearchExtension);
-            chkStopAfterN.Checked = hi.SearchParameters.StopAfterN.HasValue;
-            numStopAfterN.Value = hi.SearchParameters.StopAfterN ?? 0;
+            numStopAfterN.Value = hi.SearchParameters.StopAfterN;
 
             _matches.Clear();
             _matches.AddRange(hi.Matches);
-            PopulateRows();
+            populateRows();
 
             tabControl.SelectedIndex = 0;
         }
@@ -904,18 +793,18 @@ namespace Searcher
 
 
 
-        private void GrdResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void grdResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) { return; }
-            ViewSelectedItems();
+            viewSelectedItems();
         }
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new About().ShowDialog();
         }
 
-        private void BtnBuildRegex_Click(object sender, EventArgs e)
+        private void btnBuildRegex_Click(object sender, EventArgs e)
         {
             try
             {
@@ -931,14 +820,14 @@ namespace Searcher
             }
             catch (Exception x)
             {
-                AddError(x.Message);
+                addError(x.Message);
             }
         }
 
         #region tooltips
         private void control_MouseLeave(object sender, EventArgs e)
         {
-            HideToolTip();
+            hideToolTip();
         }
 
         private void control_MouseHover(object sender, EventArgs e)
@@ -1012,11 +901,23 @@ namespace Searcher
                 case "rtbLog":
                     text = "Logs past actions. Set the level of logging in the settings.\r\nResets when ROOSFAFS is closed.";
                     break;
+                case "dateAccessedMin":
+                    text = "";
+                    break;
+                case "dateAccessedMax":
+                    text = "";
+                    break;
+                case "dateWriteMin":
+                    text = "";
+                    break;
+                case "dateWriteMax":
+                    text = "";
+                    break;
 
             }
 
             if (string.IsNullOrWhiteSpace(text)) return;
-            ShowToolTip((Control)sender, text);
+            showToolTip((Control)sender, text);
 
         }
         #endregion

@@ -37,7 +37,6 @@
             this.chkRecursive = new System.Windows.Forms.CheckBox();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
-            this.btnContext = new System.Windows.Forms.Button();
             this.chkSkipFolders = new System.Windows.Forms.CheckBox();
             this.btnRemove = new System.Windows.Forms.Button();
             this.txtFilter = new System.Windows.Forms.TextBox();
@@ -66,12 +65,23 @@
             this.lblStopped = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDuration = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.numSizeMax = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.numSizeMin = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dateWriteMax = new System.Windows.Forms.DateTimePicker();
+            this.label11 = new System.Windows.Forms.Label();
+            this.dateWriteMin = new System.Windows.Forms.DateTimePicker();
+            this.label12 = new System.Windows.Forms.Label();
+            this.dateAccessedMax = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.dateAccessedMin = new System.Windows.Forms.DateTimePicker();
+            this.label9 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rdoFolderName = new System.Windows.Forms.RadioButton();
             this.rdoFileName = new System.Windows.Forms.RadioButton();
             this.label8 = new System.Windows.Forms.Label();
             this.rdoContents = new System.Windows.Forms.RadioButton();
-            this.chkStopAfterN = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.numStopAfterN = new System.Windows.Forms.NumericUpDown();
             this.chkSkipExtensions = new System.Windows.Forms.CheckBox();
@@ -89,6 +99,8 @@
             this.mnuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numSizeMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSizeMin)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numStopAfterN)).BeginInit();
             this.tabControl.SuspendLayout();
@@ -115,7 +127,7 @@
             this.txtSearchString.Name = "txtSearchString";
             this.txtSearchString.Size = new System.Drawing.Size(392, 20);
             this.txtSearchString.TabIndex = 0;
-            this.txtSearchString.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearchString_KeyDown);
+            this.txtSearchString.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearchString_KeyDown);
             this.txtSearchString.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.txtSearchString.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -168,7 +180,7 @@
             this.btnRootFolder.TabStop = false;
             this.btnRootFolder.Text = "Select Folder";
             this.btnRootFolder.UseVisualStyleBackColor = true;
-            this.btnRootFolder.Click += new System.EventHandler(this.BtnRootFolder_Click);
+            this.btnRootFolder.Click += new System.EventHandler(this.btnRootFolder_Click);
             // 
             // btnSearch
             // 
@@ -179,7 +191,7 @@
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "SEARCH";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // chkRecursive
             // 
@@ -207,7 +219,7 @@
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Visible = false;
-            this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // btnView
             // 
@@ -219,22 +231,9 @@
             this.btnView.TabIndex = 8;
             this.btnView.Text = "Open Files";
             this.btnView.UseVisualStyleBackColor = true;
-            this.btnView.Click += new System.EventHandler(this.BtnView_Click);
+            this.btnView.Click += new System.EventHandler(this.btnView_Click);
             this.btnView.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnView.MouseHover += new System.EventHandler(this.control_MouseHover);
-            // 
-            // btnContext
-            // 
-            this.btnContext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnContext.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnContext.Location = new System.Drawing.Point(751, 352);
-            this.btnContext.Name = "btnContext";
-            this.btnContext.Size = new System.Drawing.Size(115, 23);
-            this.btnContext.TabIndex = 9;
-            this.btnContext.Text = "Match Contexts";
-            this.btnContext.UseVisualStyleBackColor = true;
-            this.btnContext.Visible = false;
-            this.btnContext.Click += new System.EventHandler(this.BtnContext_Click);
             // 
             // chkSkipFolders
             // 
@@ -262,7 +261,7 @@
             this.btnRemove.TabIndex = 10;
             this.btnRemove.Text = "Hide Selected";
             this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             this.btnRemove.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnRemove.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -274,7 +273,7 @@
             this.txtFilter.Name = "txtFilter";
             this.txtFilter.Size = new System.Drawing.Size(588, 20);
             this.txtFilter.TabIndex = 6;
-            this.txtFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtFilter_KeyDown);
+            this.txtFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFilter_KeyDown);
             this.txtFilter.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.txtFilter.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -288,7 +287,7 @@
             this.btnRestore.TabIndex = 11;
             this.btnRestore.Text = "Restore";
             this.btnRestore.UseVisualStyleBackColor = true;
-            this.btnRestore.Click += new System.EventHandler(this.BtnRestore_Click);
+            this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
             this.btnRestore.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnRestore.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -311,7 +310,7 @@
             this.btnFilter.TabIndex = 29;
             this.btnFilter.Text = "Filter Results";
             this.btnFilter.UseVisualStyleBackColor = true;
-            this.btnFilter.Click += new System.EventHandler(this.BtnFilter_Click);
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             this.btnFilter.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnFilter.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -331,8 +330,8 @@
             this.grdResults.ShowCellToolTips = false;
             this.grdResults.Size = new System.Drawing.Size(723, 305);
             this.grdResults.TabIndex = 30;
-            this.grdResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GrdResults_CellDoubleClick);
-            this.grdResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GrdResults_KeyDown);
+            this.grdResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResults_CellDoubleClick);
+            this.grdResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grdResults_KeyDown);
             this.grdResults.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.grdResults.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -422,7 +421,7 @@
             this.btnFindInFolder.TabIndex = 41;
             this.btnFindInFolder.Text = "Find In Folder";
             this.btnFindInFolder.UseVisualStyleBackColor = true;
-            this.btnFindInFolder.Click += new System.EventHandler(this.BtnFindInFolder_Click);
+            this.btnFindInFolder.Click += new System.EventHandler(this.btnFindInFolder_Click);
             this.btnFindInFolder.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnFindInFolder.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -436,7 +435,7 @@
             this.btnCopyFiles.TabIndex = 42;
             this.btnCopyFiles.Text = "Copy Selected";
             this.btnCopyFiles.UseVisualStyleBackColor = true;
-            this.btnCopyFiles.Click += new System.EventHandler(this.BtnCopyFiles_Click);
+            this.btnCopyFiles.Click += new System.EventHandler(this.btnCopyFiles_Click);
             this.btnCopyFiles.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnCopyFiles.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -466,21 +465,21 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "&Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // btnBuildRegexSearch
             // 
@@ -492,7 +491,7 @@
             this.btnBuildRegexSearch.TabStop = false;
             this.btnBuildRegexSearch.Text = "Regex Helper";
             this.btnBuildRegexSearch.UseVisualStyleBackColor = true;
-            this.btnBuildRegexSearch.Click += new System.EventHandler(this.BtnBuildRegex_Click);
+            this.btnBuildRegexSearch.Click += new System.EventHandler(this.btnBuildRegex_Click);
             this.btnBuildRegexSearch.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.btnBuildRegexSearch.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -538,8 +537,19 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.numSizeMax);
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.numSizeMin);
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.dateWriteMax);
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.dateWriteMin);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.dateAccessedMax);
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Controls.Add(this.dateAccessedMin);
+            this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.chkStopAfterN);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.numStopAfterN);
             this.panel1.Controls.Add(this.chkSkipExtensions);
@@ -550,11 +560,138 @@
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.txtSkipExtension);
             this.panel1.Controls.Add(this.chkSkipFolders);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(723, 249);
+            this.panel1.Size = new System.Drawing.Size(723, 305);
             this.panel1.TabIndex = 45;
+            // 
+            // numSizeMax
+            // 
+            this.numSizeMax.Location = new System.Drawing.Point(463, 185);
+            this.numSizeMax.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.numSizeMax.Name = "numSizeMax";
+            this.numSizeMax.Size = new System.Drawing.Size(111, 20);
+            this.numSizeMax.TabIndex = 60;
+            this.numSizeMax.Value = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(356, 187);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(106, 13);
+            this.label14.TabIndex = 59;
+            this.label14.Text = "File Size Max (bytes):";
+            // 
+            // numSizeMin
+            // 
+            this.numSizeMin.Location = new System.Drawing.Point(226, 185);
+            this.numSizeMin.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.numSizeMin.Name = "numSizeMin";
+            this.numSizeMin.Size = new System.Drawing.Size(111, 20);
+            this.numSizeMin.TabIndex = 58;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(117, 187);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(103, 13);
+            this.label13.TabIndex = 57;
+            this.label13.Text = "File Size Min (bytes):";
+            // 
+            // dateWriteMax
+            // 
+            this.dateWriteMax.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateWriteMax.Location = new System.Drawing.Point(463, 239);
+            this.dateWriteMax.Name = "dateWriteMax";
+            this.dateWriteMax.Size = new System.Drawing.Size(111, 20);
+            this.dateWriteMax.TabIndex = 56;
+            this.dateWriteMax.Value = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.dateWriteMax.MouseLeave += new System.EventHandler(this.control_MouseLeave);
+            this.dateWriteMax.MouseHover += new System.EventHandler(this.control_MouseHover);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(356, 243);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(101, 13);
+            this.label11.TabIndex = 55;
+            this.label11.Text = "Last Written Before:";
+            // 
+            // dateWriteMin
+            // 
+            this.dateWriteMin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateWriteMin.Location = new System.Drawing.Point(226, 239);
+            this.dateWriteMin.Name = "dateWriteMin";
+            this.dateWriteMin.Size = new System.Drawing.Size(111, 20);
+            this.dateWriteMin.TabIndex = 54;
+            this.dateWriteMin.Value = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.dateWriteMin.MouseLeave += new System.EventHandler(this.control_MouseLeave);
+            this.dateWriteMin.MouseHover += new System.EventHandler(this.control_MouseHover);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(128, 243);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(92, 13);
+            this.label12.TabIndex = 53;
+            this.label12.Text = "Last Written After:";
+            // 
+            // dateAccessedMax
+            // 
+            this.dateAccessedMax.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateAccessedMax.Location = new System.Drawing.Point(463, 213);
+            this.dateAccessedMax.Name = "dateAccessedMax";
+            this.dateAccessedMax.Size = new System.Drawing.Size(111, 20);
+            this.dateAccessedMax.TabIndex = 52;
+            this.dateAccessedMax.Value = new System.DateTime(2100, 12, 31, 0, 0, 0, 0);
+            this.dateAccessedMax.MouseLeave += new System.EventHandler(this.control_MouseLeave);
+            this.dateAccessedMax.MouseHover += new System.EventHandler(this.control_MouseHover);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(343, 217);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(114, 13);
+            this.label10.TabIndex = 51;
+            this.label10.Text = "Last Accessed Before:";
+            // 
+            // dateAccessedMin
+            // 
+            this.dateAccessedMin.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateAccessedMin.Location = new System.Drawing.Point(226, 213);
+            this.dateAccessedMin.Name = "dateAccessedMin";
+            this.dateAccessedMin.Size = new System.Drawing.Size(111, 20);
+            this.dateAccessedMin.TabIndex = 50;
+            this.dateAccessedMin.Value = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.dateAccessedMin.MouseLeave += new System.EventHandler(this.control_MouseLeave);
+            this.dateAccessedMin.MouseHover += new System.EventHandler(this.control_MouseHover);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(115, 217);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(105, 13);
+            this.label9.TabIndex = 49;
+            this.label9.Text = "Last Accessed After:";
             // 
             // panel2
             // 
@@ -615,18 +752,6 @@
             this.rdoContents.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.rdoContents.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
-            // chkStopAfterN
-            // 
-            this.chkStopAfterN.AutoSize = true;
-            this.chkStopAfterN.Location = new System.Drawing.Point(105, 126);
-            this.chkStopAfterN.Name = "chkStopAfterN";
-            this.chkStopAfterN.Size = new System.Drawing.Size(15, 14);
-            this.chkStopAfterN.TabIndex = 47;
-            this.chkStopAfterN.UseVisualStyleBackColor = true;
-            this.chkStopAfterN.CheckedChanged += new System.EventHandler(this.ChkStopAfterN_CheckedChanged);
-            this.chkStopAfterN.MouseLeave += new System.EventHandler(this.control_MouseLeave);
-            this.chkStopAfterN.MouseHover += new System.EventHandler(this.control_MouseHover);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -638,11 +763,20 @@
             // 
             // numStopAfterN
             // 
-            this.numStopAfterN.Enabled = false;
-            this.numStopAfterN.Location = new System.Drawing.Point(126, 124);
+            this.numStopAfterN.Location = new System.Drawing.Point(105, 124);
+            this.numStopAfterN.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numStopAfterN.Name = "numStopAfterN";
             this.numStopAfterN.Size = new System.Drawing.Size(60, 20);
             this.numStopAfterN.TabIndex = 45;
+            this.numStopAfterN.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             // 
             // chkSkipExtensions
             // 
@@ -675,8 +809,8 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(737, 337);
             this.tabControl.TabIndex = 36;
-            this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabControl_DrawItem);
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
+            this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl_DrawItem);
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // tab1
             // 
@@ -718,7 +852,7 @@
             this.lstSearchHistory.Name = "lstSearchHistory";
             this.lstSearchHistory.Size = new System.Drawing.Size(729, 311);
             this.lstSearchHistory.TabIndex = 0;
-            this.lstSearchHistory.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LstSearchHistory_MouseDoubleClick);
+            this.lstSearchHistory.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstSearchHistory_MouseDoubleClick);
             this.lstSearchHistory.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.lstSearchHistory.MouseHover += new System.EventHandler(this.control_MouseHover);
             // 
@@ -790,7 +924,6 @@
             this.Controls.Add(this.btnRestore);
             this.Controls.Add(this.txtFilter);
             this.Controls.Add(this.btnRemove);
-            this.Controls.Add(this.btnContext);
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.chkRecursive);
@@ -815,6 +948,8 @@
             this.statusStrip.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numSizeMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSizeMin)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numStopAfterN)).EndInit();
@@ -842,7 +977,6 @@
         private System.Windows.Forms.CheckBox chkRecursive;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnView;
-        private System.Windows.Forms.Button btnContext;
         private System.Windows.Forms.CheckBox chkSkipFolders;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.TextBox txtFilter;
@@ -877,7 +1011,6 @@
         private System.Windows.Forms.RichTextBox rtbLog;
         private System.Windows.Forms.CheckBox chkSkipExtensions;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.CheckBox chkStopAfterN;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numStopAfterN;
         private System.Windows.Forms.Panel panel2;
@@ -890,6 +1023,18 @@
         private System.Windows.Forms.ComboBox ddlFilterInclude;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.DateTimePicker dateAccessedMax;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.DateTimePicker dateAccessedMin;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.DateTimePicker dateWriteMax;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DateTimePicker dateWriteMin;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.NumericUpDown numSizeMin;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown numSizeMax;
+        private System.Windows.Forms.Label label14;
     }
 }
 

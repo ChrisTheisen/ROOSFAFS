@@ -31,6 +31,7 @@
             this.rtbContent = new System.Windows.Forms.RichTextBox();
             this.pnlBody = new System.Windows.Forms.Panel();
             this.pnlLineNumbers = new System.Windows.Forms.Panel();
+            this.btnCopyPath = new System.Windows.Forms.Button();
             this.pnlBottom.SuspendLayout();
             this.pnlBody.SuspendLayout();
             this.SuspendLayout();
@@ -38,6 +39,7 @@
             // pnlBottom
             // 
             this.pnlBottom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlBottom.Controls.Add(this.btnCopyPath);
             this.pnlBottom.Controls.Add(this.lblSize);
             this.pnlBottom.Controls.Add(this.lblPos);
             this.pnlBottom.Controls.Add(this.txtPath);
@@ -73,15 +75,15 @@
             this.txtPath.Location = new System.Drawing.Point(3, 3);
             this.txtPath.Name = "txtPath";
             this.txtPath.ReadOnly = true;
-            this.txtPath.Size = new System.Drawing.Size(321, 20);
+            this.txtPath.Size = new System.Drawing.Size(257, 20);
             this.txtPath.TabIndex = 2;
             // 
             // btnFindInFolder
             // 
             this.btnFindInFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFindInFolder.Location = new System.Drawing.Point(327, 3);
+            this.btnFindInFolder.Location = new System.Drawing.Point(356, 3);
             this.btnFindInFolder.Name = "btnFindInFolder";
-            this.btnFindInFolder.Size = new System.Drawing.Size(113, 23);
+            this.btnFindInFolder.Size = new System.Drawing.Size(84, 23);
             this.btnFindInFolder.TabIndex = 1;
             this.btnFindInFolder.Text = "Find In Folder";
             this.btnFindInFolder.UseVisualStyleBackColor = true;
@@ -119,6 +121,17 @@
             this.pnlLineNumbers.Size = new System.Drawing.Size(43, 387);
             this.pnlLineNumbers.TabIndex = 2;
             // 
+            // btnCopyPath
+            // 
+            this.btnCopyPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyPath.Location = new System.Drawing.Point(266, 3);
+            this.btnCopyPath.Name = "btnCopyPath";
+            this.btnCopyPath.Size = new System.Drawing.Size(84, 23);
+            this.btnCopyPath.TabIndex = 4;
+            this.btnCopyPath.Text = "Copy Path";
+            this.btnCopyPath.UseVisualStyleBackColor = true;
+            this.btnCopyPath.Click += new System.EventHandler(this.btnCopyPath_Click);
+            // 
             // FancyTextBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,5 +157,6 @@
         private System.Windows.Forms.Label lblPos;
         private System.Windows.Forms.Label lblSize;
         private System.Windows.Forms.Panel pnlLineNumbers;
+        private System.Windows.Forms.Button btnCopyPath;
     }
 }

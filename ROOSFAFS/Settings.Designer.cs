@@ -110,7 +110,7 @@
             this.btnSave.TabIndex = 4;
             this.btnSave.Text = "OK";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnClose
             // 
@@ -121,7 +121,7 @@
             this.btnClose.TabIndex = 5;
             this.btnClose.Text = "Cancel";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // barOpacity
             // 
@@ -140,7 +140,7 @@
             this.barOpacity.TickFrequency = 10;
             this.barOpacity.TickStyle = System.Windows.Forms.TickStyle.None;
             this.barOpacity.Value = 100;
-            this.barOpacity.Scroll += new System.EventHandler(this.BarOpacity_Scroll);
+            this.barOpacity.Scroll += new System.EventHandler(this.barOpacity_Scroll);
             // 
             // chkExternalFileViewer
             // 
@@ -152,7 +152,7 @@
             this.chkExternalFileViewer.TabIndex = 7;
             this.chkExternalFileViewer.Text = "Use External File Viewer";
             this.chkExternalFileViewer.UseVisualStyleBackColor = true;
-            this.chkExternalFileViewer.CheckedChanged += new System.EventHandler(this.ChkExternalFileViewer_CheckedChanged);
+            this.chkExternalFileViewer.CheckedChanged += new System.EventHandler(this.chkExternalFileViewer_CheckedChanged);
             // 
             // txtSkipFolders
             // 
@@ -183,7 +183,7 @@
             this.btnRestoreDefault.TabIndex = 10;
             this.btnRestoreDefault.Text = "Restore Defaults";
             this.btnRestoreDefault.UseVisualStyleBackColor = true;
-            this.btnRestoreDefault.Click += new System.EventHandler(this.BtnRestoreDefault_Click);
+            this.btnRestoreDefault.Click += new System.EventHandler(this.btnRestoreDefault_Click);
             // 
             // txtSkipExtensions
             // 
@@ -216,8 +216,8 @@
             this.clbResults.Size = new System.Drawing.Size(176, 214);
             this.clbResults.Sorted = true;
             this.clbResults.TabIndex = 14;
-            this.clbResults.SelectedIndexChanged += new System.EventHandler(this.ClbResults_SelectedIndexChanged);
-            this.clbResults.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ClbResults_MouseDoubleClick);
+            this.clbResults.SelectedIndexChanged += new System.EventHandler(this.clbResults_SelectedIndexChanged);
+            this.clbResults.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.clbResults_MouseDoubleClick);
             // 
             // label5
             // 
@@ -253,7 +253,7 @@
             this.btnUp.TabIndex = 18;
             this.btnUp.Text = "▲";
             this.btnUp.UseVisualStyleBackColor = true;
-            this.btnUp.Click += new System.EventHandler(this.BtnUp_Click);
+            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
             // 
             // btnDown
             // 
@@ -263,7 +263,7 @@
             this.btnDown.TabIndex = 19;
             this.btnDown.Text = "▼";
             this.btnDown.UseVisualStyleBackColor = true;
-            this.btnDown.Click += new System.EventHandler(this.BtnDown_Click);
+            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
             // 
             // chkLogInfo
             // 

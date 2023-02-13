@@ -34,14 +34,14 @@ namespace Searcher
 			foreach (var filePath in filePaths)
 			{
 				var row = output.NewRow();
-				GetFileData(filePath, row);
+				getFileData(filePath, row);
 				output.Rows.Add(row);
 			}
 
 			return output;
 		}
 
-		private static void GetFileData(string filePath, DataRow input)
+		private static void getFileData(string filePath, DataRow input)
 		{
 			if (!File.Exists(filePath)) return;
 
@@ -69,20 +69,19 @@ namespace Searcher
 			IDictionary<string, Exception> failedFiles, List<Match> matches,
 			ToolStripStatusLabel status, Label fileCount)
 		{
-			SearchFolder(sp, sp.RootFolder, failedFiles, matches, status, fileCount);
+			searchFolder(sp, sp.RootFolder, failedFiles, matches, status, fileCount);
 		}
 
-		private static void SearchFolder(SearchParameters sp, string searchPath, IDictionary<string, Exception> failedFiles, List<Match> matches, ToolStripStatusLabel status, Control fileCount)
+		private static void searchFolder(SearchParameters sp, string searchPath, IDictionary<string, Exception> failedFiles, List<Match> matches, ToolStripStatusLabel status, Control fileCount)
 		{
 			if (sp.CancellationToken.IsCancellationRequested
-				 || (sp.StopAfterN.HasValue && matches.Count >= sp.StopAfterN.Value)
+				 || matches.Count >= sp.StopAfterN
 				 || !Directory.Exists(searchPath)
-				 || sp.SkipFolders().Any(skip => searchPath.ToUpper().Contains(skip.ToUpper())
-												 || skip.ToUpper().Contains(searchPath.ToUpper())))
+				 || sp.SkipFolders().Any(skip => searchPath.ToUpper().Contains(skip.ToUpper()) || skip.ToUpper().Contains(searchPath.ToUpper())))
 				return;
 
 			MultiThread.UpdateToolStripStatus(status, searchPath);
-			SearchFiles(sp, searchPath, failedFiles, matches);
+			searchFiles(sp, searchPath, failedFiles, matches);
 			MultiThread.SetProperty(fileCount, "Text", "Hits:" + matches.Count);
 
 			if (!sp.IsRecursive)
@@ -91,19 +90,24 @@ namespace Searcher
 			var dirs = Directory.GetDirectories(searchPath);
 			foreach (var dir in dirs)
 			{
-				SearchFolder(sp, dir, failedFiles, matches, status, fileCount);
+				searchFolder(sp, dir, failedFiles, matches, status, fileCount);
 			}
 		}
 
-		private static void SearchFiles(SearchParameters sp, string filePath, IDictionary<string, Exception> failedFiles, List<Match> matches)
+		private static void searchFiles(SearchParameters sp, string filePath, IDictionary<string, Exception> failedFiles, List<Match> matches)
 		{
 			try
 			{
+				var di = new DirectoryInfo(filePath);
+				if (di.LastAccessTime < sp.AccessMin || di.LastAccessTime > sp.AccessMax
+					|| di.LastWriteTime < sp.WriteMin || di.LastWriteTime > sp.WriteMax) 
+					return;
+
 				if (sp.SearchType == SearchType.Foldername)
 				{
-					if (SearchString(sp, filePath))
+					if (searchString(sp, filePath))
 					{
-						matches.Add(new Match(new DirectoryInfo(filePath)));
+						matches.Add(new Match(di));
 					}
 					return;
 				}
@@ -115,7 +119,7 @@ namespace Searcher
 					{
 						if (sp.SearchType == SearchType.FileContents || sp.SearchType == SearchType.FileName)
 						{
-							SearchFile(sp, file, matches);
+							searchFile(sp, file, matches);
 						}
 					}
 					catch (Exception x) { failedFiles.Add(file, x); }
@@ -128,17 +132,17 @@ namespace Searcher
 			}
 		}
 
-		private static void SearchFile(SearchParameters sp, string filePath, List<Match> matches)
+		private static void searchFile(SearchParameters sp, string filePath, List<Match> matches)
 		{
-			if (sp.CancellationToken.IsCancellationRequested || (sp.StopAfterN.HasValue && matches.Count >= sp.StopAfterN.Value))
+			if (sp.CancellationToken.IsCancellationRequested || matches.Count >= sp.StopAfterN)
 				return;
 
 			var fi = new FileInfo(filePath);
-			if (SkipFile(sp.SkipExtensions(), sp.SearchExtensions(), fi))
+			if (SkipFile(sp, fi))
 				return;
 
 			var matchLine = string.Empty;
-			var match = SearchString(sp, filePath);
+			var match = searchString(sp, filePath);
 			if (!match && sp.SearchType == SearchType.FileContents)
 			{
 				match = SearchContents(sp, filePath, out matchLine);
@@ -163,7 +167,7 @@ namespace Searcher
 				for (var len = reader.Read(temp, 0, 1024); len != 0; len = reader.Read(temp, 0, 1024))
 				{
 					buffer.Append(temp);
-					if (SearchString(sp, buffer.ToString()))
+					if (searchString(sp, buffer.ToString()))
 					{
 						firstMatch = buffer.ToString();
 						return true;
@@ -179,7 +183,7 @@ namespace Searcher
 			return false;
 		}
 
-		private static bool SearchString(SearchParameters sp, string hayStack)
+		private static bool searchString(SearchParameters sp, string hayStack)
 		{
 			if (sp.IsRegex)
 			{
@@ -188,16 +192,34 @@ namespace Searcher
 			return CultureInfo.CurrentCulture.CompareInfo.IndexOf(hayStack, sp.SearchString, CompareOptions.IgnoreCase) >= 0;
 		}
 
-		private static bool SkipFile(IEnumerable<string> skip, IEnumerable<string> search, FileSystemInfo fsi)
+		/// <summary>
+		/// Return true if file should be skipped and not searched.
+		/// </summary>
+		/// <param name="sp"></param>
+		/// <param name="fi"></param>
+		/// <returns></returns>
+		private static bool SkipFile(SearchParameters sp, FileInfo fi)
 		{
-			if (skip.Contains(fsi.Extension))
+
+			var skip = sp.SkipExtensions();
+			var search = sp.SearchExtensions();
+
+			if (skip.Contains(fi.Extension))
 			{
 				return true;
 			}
 
+			if (fi.LastAccessTime < sp.AccessMin || fi.LastAccessTime > sp.AccessMax
+				|| fi.LastWriteTime < sp.WriteMin || fi.LastWriteTime > sp.WriteMax)
+			{
+				return true;
+			}
+
+			if (fi.Length < sp.SizeMin || fi.Length > sp.SizeMax) { return true; }
+
 			IEnumerable<string> includedFiles = search as string[] ?? search.ToArray();
-			return includedFiles.Any() && !(includedFiles.Contains(fsi.Extension)
-											 || includedFiles.Contains(fsi.Extension.TrimStart('.')));
+			return includedFiles.Any() && !(includedFiles.Contains(fi.Extension)
+											 || includedFiles.Contains(fi.Extension.TrimStart('.')));
 		}
 		#endregion
 	}
@@ -257,7 +279,15 @@ namespace Searcher
 
 	    public string[] SkipExtension { get; set; }
 
-		public int? StopAfterN { get; set; }
+		public int StopAfterN { get; set; }
+
+		public decimal SizeMin { get; set; }
+		public decimal SizeMax { get; set; }
+
+		public DateTime AccessMin { get; set; }
+		public DateTime AccessMax { get; set; }
+		public DateTime WriteMin { get; set; }
+		public DateTime WriteMax { get; set; }
 
 	    public CancellationToken CancellationToken { get; }
 
@@ -322,10 +352,10 @@ namespace Searcher
 		private readonly FileInfo _fileInfo;
 		private readonly DirectoryInfo _directoryInfo;
 
-		private SearchType SearchType {get; set;}
+		private SearchType _searchType {get; set;}
         public RowData(Match input, SearchType searchType)
 		{
-			SearchType = searchType;
+			_searchType = searchType;
 			switch (searchType)
 			{
 				case SearchType.FileName:
@@ -344,7 +374,7 @@ namespace Searcher
 
 		public void BuildRow(DataRow row, DataColumnCollection columns, string matchLine)
 		{
-            switch (SearchType)
+            switch (_searchType)
 			{
 				case SearchType.FileName:
 				case SearchType.FileContents:

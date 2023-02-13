@@ -110,10 +110,10 @@ namespace Searcher
                 if (_requiredResultsColumns.Contains(prop.Name)) { continue; }
                 clbResults.Items.Add(prop.Name);
             }
-            PopulateInputs();
+            populateInputs();
         }
 
-        private void PopulateInputs()
+        private void populateInputs()
         {
             txtRoot.Text = _root;
             txtSkipExtensions.Text = string.Join(",", SkipExtensions.Cast<string>().ToArray());
@@ -125,13 +125,13 @@ namespace Searcher
             chkLogError.Checked = LogError;
             chkShowTooltip.Checked = ShowToolTip;
             numContextSize.Value = ContextSize;
-            SetAllChecks(clbResults, _resultsColumns);
-            SetListItems(lstColOrder, _columnOrder);
+            setAllChecks(clbResults, _resultsColumns);
+            setListItems(lstColOrder, _columnOrder);
 
             txtTextEditor.Visible = chkExternalFileViewer.Checked;
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
 
             if (!string.IsNullOrEmpty(txtRoot.Text))
@@ -164,7 +164,7 @@ namespace Searcher
             Hide();
         }
 
-        private void BtnClose_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
             txtRoot.Text = _root;
             txtTextEditor.Text = _textEditor;
@@ -176,14 +176,14 @@ namespace Searcher
             chkShowTooltip.Checked = _showToolTip;
             txtSkipFolders.Text = string.Join(",", _skipFolders);
             txtSkipExtensions.Text = string.Join(",", _skipExtensions);
-            SetAllChecks(clbResults, _resultsColumns);
-            SetListItems(lstColOrder, _columnOrder);
+            setAllChecks(clbResults, _resultsColumns);
+            setListItems(lstColOrder, _columnOrder);
 
             DialogResult = DialogResult.Cancel;
             Hide();
         }
 
-        private static void SetAllChecks(CheckedListBox chklistbox, IEnumerable itemList)
+        private static void setAllChecks(CheckedListBox chklistbox, IEnumerable itemList)
         {
             if (itemList == null) return;
 
@@ -195,7 +195,7 @@ namespace Searcher
             }
         }
 
-        private static void SetListItems(ListBox lst, IEnumerable itemList)
+        private static void setListItems(ListBox lst, IEnumerable itemList)
         {
             if (itemList == null) return;
             lst.Items.Clear();
@@ -207,17 +207,17 @@ namespace Searcher
             }
         }
 
-        private void BarOpacity_Scroll(object sender, EventArgs e)
+        private void barOpacity_Scroll(object sender, EventArgs e)
         {
             Opacity = barOpacity.Value / 100f;
         }
 
-        private void ChkExternalFileViewer_CheckedChanged(object sender, EventArgs e)
+        private void chkExternalFileViewer_CheckedChanged(object sender, EventArgs e)
         {
             txtTextEditor.Visible = chkExternalFileViewer.Checked;
         }
 
-        private void BtnRestoreDefault_Click(object sender, EventArgs e)
+        private void btnRestoreDefault_Click(object sender, EventArgs e)
         {
             _root = _defaultRoot;
             _textEditor = _defaultTextEditor;
@@ -237,15 +237,15 @@ namespace Searcher
             _logError = _defaultLogError;
             _showToolTip = _defaultShowToolTip;
 
-            PopulateInputs();
+            populateInputs();
         }
 
-        private void BtnUp_Click(object sender, EventArgs e)
+        private void btnUp_Click(object sender, EventArgs e)
         {
             MoveItem(lstColOrder, -1);
         }
 
-        private void BtnDown_Click(object sender, EventArgs e)
+        private void btnDown_Click(object sender, EventArgs e)
         {
             MoveItem(lstColOrder, 1);
         }
@@ -267,7 +267,7 @@ namespace Searcher
         }
 
         ////has to be a better way to do this part:
-        private void ClbResults_SelectedIndexChanged(object sender, EventArgs e)
+        private void clbResults_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (clbResults.CheckedItems.Contains(clbResults.SelectedItem))
             {
@@ -280,7 +280,7 @@ namespace Searcher
                 lstColOrder.Items.Remove(clbResults.SelectedItem);
             }
         }
-        private void ClbResults_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void clbResults_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (clbResults.CheckedItems.Contains(clbResults.SelectedItem))
             {
