@@ -113,7 +113,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "V: 0.9.230212";
+            this.label3.Text = "V: 0.9.230213";
             // 
             // btnClose
             // 
@@ -129,7 +129,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 268);
+            this.ClientSize = new System.Drawing.Size(377, 273);
             this.ControlBox = false;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);

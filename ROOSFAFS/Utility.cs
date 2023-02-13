@@ -14,6 +14,7 @@ namespace Searcher
 {
 	internal class Utility
 	{
+
 		public static string GetVersion(string file)
 		{
 			var vers = FileVersionInfo.GetVersionInfo(file);
@@ -67,21 +68,21 @@ namespace Searcher
 		#region search stuff methods
 		internal static void SearchFolder(SearchParameters sp,
 			IDictionary<string, Exception> failedFiles, List<Match> matches,
-			ToolStripStatusLabel status, Label fileCount)
+			ToolStripStatusLabel status, Label fileCount, DataGridView resultGrid, DataTable dataSource)
 		{
-			searchFolder(sp, sp.RootFolder, failedFiles, matches, status, fileCount);
+			searchFolder(sp, sp.RootFolder, failedFiles, matches, status, fileCount, resultGrid, dataSource);
 		}
 
-		private static void searchFolder(SearchParameters sp, string searchPath, IDictionary<string, Exception> failedFiles, List<Match> matches, ToolStripStatusLabel status, Control fileCount)
+		private static void searchFolder(SearchParameters sp, string searchPath, IDictionary<string, Exception> failedFiles, List<Match> matches, ToolStripStatusLabel status, Control fileCount, DataGridView resultGrid, DataTable dataSource)
 		{
 			if (sp.CancellationToken.IsCancellationRequested
 				 || matches.Count >= sp.StopAfterN
 				 || !Directory.Exists(searchPath)
 				 || sp.SkipFolders().Any(skip => searchPath.ToUpper().Contains(skip.ToUpper()) || skip.ToUpper().Contains(searchPath.ToUpper())))
-				return;
+                return;
 
-			MultiThread.UpdateToolStripStatus(status, searchPath);
-			searchFiles(sp, searchPath, failedFiles, matches);
+            MultiThread.UpdateToolStripStatus(status, searchPath);
+			searchFiles(sp, searchPath, failedFiles, matches, resultGrid, dataSource);
 			MultiThread.SetProperty(fileCount, "Text", "Hits:" + matches.Count);
 
 			if (!sp.IsRecursive)
@@ -90,14 +91,15 @@ namespace Searcher
 			var dirs = Directory.GetDirectories(searchPath);
 			foreach (var dir in dirs)
 			{
-				searchFolder(sp, dir, failedFiles, matches, status, fileCount);
+				searchFolder(sp, dir, failedFiles, matches, status, fileCount, resultGrid, dataSource);
 			}
 		}
 
-		private static void searchFiles(SearchParameters sp, string filePath, IDictionary<string, Exception> failedFiles, List<Match> matches)
+		private static void searchFiles(SearchParameters sp, string filePath, IDictionary<string, Exception> failedFiles, List<Match> matches, DataGridView resultGrid, DataTable dataSource)
 		{
 			try
 			{
+				var matchBatch = new List<Match>();
 				var di = new DirectoryInfo(filePath);
 				if (di.LastAccessTime < sp.AccessMin || di.LastAccessTime > sp.AccessMax
 					|| di.LastWriteTime < sp.WriteMin || di.LastWriteTime > sp.WriteMax) 
@@ -106,8 +108,9 @@ namespace Searcher
 				if (sp.SearchType == SearchType.Foldername)
 				{
 					if (searchString(sp, filePath))
-					{
-						matches.Add(new Match(di));
+                    {
+						var m = new Match(di);
+						addMatch(sp, matches, resultGrid, dataSource, m);
 					}
 					return;
 				}
@@ -119,7 +122,7 @@ namespace Searcher
 					{
 						if (sp.SearchType == SearchType.FileContents || sp.SearchType == SearchType.FileName)
 						{
-							searchFile(sp, file, matches);
+							searchFile(sp, file, matches, resultGrid, dataSource);
 						}
 					}
 					catch (Exception x) { failedFiles.Add(file, x); }
@@ -132,25 +135,26 @@ namespace Searcher
 			}
 		}
 
-		private static void searchFile(SearchParameters sp, string filePath, List<Match> matches)
+		private static void searchFile(SearchParameters sp, string filePath, List<Match> matches, DataGridView resultGrid, DataTable dataSource)
 		{
 			if (sp.CancellationToken.IsCancellationRequested || matches.Count >= sp.StopAfterN)
 				return;
 
 			var fi = new FileInfo(filePath);
-			if (SkipFile(sp, fi))
+			if (skipFile(sp, fi))
 				return;
 
 			var matchLine = string.Empty;
-			var match = searchString(sp, filePath);
-			if (!match && sp.SearchType == SearchType.FileContents)
+			var isMatch = searchString(sp, filePath);
+			if (!isMatch && sp.SearchType == SearchType.FileContents)
 			{
-				match = SearchContents(sp, filePath, out matchLine);
+				isMatch = SearchContents(sp, filePath, out matchLine);
 			}
 
-			if (match)
+			if (isMatch)
 			{
-				matches.Add(new Match(fi, matchLine));
+				var m = new Match(fi, matchLine);
+				addMatch(sp, matches, resultGrid, dataSource, m);
 			}
 		}
 
@@ -190,7 +194,34 @@ namespace Searcher
 				return Regex.IsMatch(hayStack, sp.SearchString);
 			}
 			return CultureInfo.CurrentCulture.CompareInfo.IndexOf(hayStack, sp.SearchString, CompareOptions.IgnoreCase) >= 0;
+        }
+
+        private static void addMatch(SearchParameters sp, List<Match> matches, 
+			DataGridView dataGrid, DataTable dataSource, Match match)
+        {
+			matches.Add(match);
+
+			//add matches in batches to limit flicker
+			var batch = matches.Where(x => !x.IsAdded);
+			if (batch.Count() < 20) { return; }
+
+			var vScroll = Math.Max(0, dataGrid.FirstDisplayedScrollingRowIndex);
+			MultiThread.SetProperty(dataGrid, "Visible", false);
+			MultiThread.SetProperty(dataGrid, "DataSource", null);
+
+			foreach (var m in batch)
+			{
+				var newRow = dataSource.NewRow();
+				new RowData(m, sp.SearchType).BuildRow(newRow, dataSource.Columns, m.FirstMatch);
+				dataSource.Rows.Add(newRow);
+				m.IsAdded = true;
+			}
+
+            MultiThread.SetProperty(dataGrid, "DataSource", dataSource);
+			MultiThread.SetProperty(dataGrid, "FirstDisplayedScrollingRowIndex", vScroll);
+			MultiThread.SetProperty(dataGrid, "Visible", true);
 		}
+
 
 		/// <summary>
 		/// Return true if file should be skipped and not searched.
@@ -198,7 +229,7 @@ namespace Searcher
 		/// <param name="sp"></param>
 		/// <param name="fi"></param>
 		/// <returns></returns>
-		private static bool SkipFile(SearchParameters sp, FileInfo fi)
+		private static bool skipFile(SearchParameters sp, FileInfo fi)
 		{
 
 			var skip = sp.SkipExtensions();
@@ -230,18 +261,21 @@ namespace Searcher
 		public FileInfo FileInfo { get; set; }
 		public DirectoryInfo DirectoryInfo { get; set; }
 		public string FirstMatch { get; set; }
+		public bool IsAdded { get; set; }
 
 		public Match(FileInfo fileInfo, string firstMatch)
 		{
 			FileInfo = fileInfo;
 			FirstMatch = firstMatch;
 			DirectoryInfo = null;
+			IsAdded = false;
 		}
 		public Match(DirectoryInfo directoryInfo)
 		{
 			FileInfo = null;
 			FirstMatch = null;
 			DirectoryInfo = directoryInfo;
+			IsAdded = false;
 		}
 	}
 
@@ -379,12 +413,12 @@ namespace Searcher
 				case SearchType.FileName:
 				case SearchType.FileContents:
 					{
-						PopulateFileRow(row, columns);
+						populateFileRow(row, columns);
 						break;
 					}
 				case SearchType.Foldername:
 					{
-                        PopulateDirectoryRow(row, columns);
+                        populateDirectoryRow(row, columns);
                         break;
 					}
 			}
@@ -396,7 +430,7 @@ namespace Searcher
         }
 
 
-		private void PopulateFileRow(DataRow row, DataColumnCollection columns)
+		private void populateFileRow(DataRow row, DataColumnCollection columns)
 		{
 			foreach (var prop in _fileInfo.GetType().GetProperties())
             {
@@ -407,7 +441,7 @@ namespace Searcher
             }
         }
 
-        private void PopulateDirectoryRow(DataRow row, DataColumnCollection columns)
+        private void populateDirectoryRow(DataRow row, DataColumnCollection columns)
 		{
             foreach (var prop in _directoryInfo.GetType().GetProperties())
             {
