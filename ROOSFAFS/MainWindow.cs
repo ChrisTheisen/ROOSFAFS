@@ -40,7 +40,7 @@ namespace Searcher
 
             txtRootFolder.Text = _properties.Root;
 
-            folderBrowser.SelectedPath = @"C:\";
+            folderBrowser.SelectedPath = @"C:\"; 
 
             rtbLog.AppendText("Opened: " + DateTime.Now);
         }
@@ -235,7 +235,11 @@ namespace Searcher
             lblDuration.Text = string.Empty;
 
             grdResults.ClearSelection();
-            grdResults.DataSource = null;
+            //grdResults.DataSource = null;
+            
+
+            grdResults.DataSource = _dataSource;
+            _dataSource.Rows.Clear();
             _dataSource.Clear();
             _dataSource.DefaultView.Sort = string.Empty;
 
@@ -282,7 +286,7 @@ namespace Searcher
             };
 
             txtFilter.Text = null;
-            tabControl.Visible = false;
+            //tabControl.Visible = false;
             lblCount.Text = @"Hits:0";
 
             foreach (Control c in Controls)
@@ -323,7 +327,7 @@ namespace Searcher
 
             if (!(o is SearchParameters)) { return; }
             var sp = (SearchParameters)o;
-            Utility.SearchFolder(sp, failedFiles, _matches, lblStatus, lblCount);
+            Utility.SearchFolder(sp, failedFiles, _matches, lblStatus, lblCount, grdResults, _dataSource);
 
             _searchHistories.Add(new SearchHistory(sp, _matches, _stop));
             updateHistory();
@@ -336,6 +340,7 @@ namespace Searcher
             {
                 addWarning($"Skipped {key}: {failedFiles[key]}");
             }
+
             populateRows();
 
             MultiThread.SetProperty(btnSearch, "Enabled", true);
@@ -360,7 +365,7 @@ namespace Searcher
             MultiThread.SetProperty(btnStop, "Visible", false);
 
             MultiThread.InvokeMethod(txtSearchString, "Focus", null);
-            MultiThread.SetProperty(grdResults, "DataSource", _dataSource);
+            //MultiThread.SetProperty(grdResults, "DataSource", _dataSource);
 
             MultiThread.SetProperty(tabControl, "SelectedIndex", 0);
 
@@ -559,6 +564,7 @@ namespace Searcher
 
         private void populateRows()
         {
+            MultiThread.SetProperty(grdResults, "DataSource", null);
             _dataSource.Rows.Clear();
             foreach (var match in _matches)
             {
@@ -566,6 +572,7 @@ namespace Searcher
                 new RowData(match, _selectedSearchType).BuildRow(newRow, _dataSource.Columns, match.FirstMatch);
                 _dataSource.Rows.Add(newRow);
             }
+            MultiThread.SetProperty(grdResults, "DataSource", _dataSource);
         }
         private SearchType _selectedSearchType
         {

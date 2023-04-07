@@ -61,25 +61,6 @@ namespace ROOSFAFS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>svn</string>
-  <string>git</string>
-  <string>vs</string>
-  <string>dll</string>
-  <string>exe</string>
-</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection commonSkipExtensions {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["commonSkipExtensions"]));
-            }
-            set {
-                this["commonSkipExtensions"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool tvConfirmCloseTab {
             get {
@@ -244,6 +225,37 @@ namespace ROOSFAFS.Properties {
             }
             set {
                 this["columnOrder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <string>svn</string>
+  <string>git</string>
+  <string>vs</string>
+  <string>dll</string>
+  <string>exe</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection commonSkipExtensions {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["commonSkipExtensions"]));
+            }
+            set {
+                this["commonSkipExtensions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int tvScrollSpeed {
+            get {
+                return ((int)(this["tvScrollSpeed"]));
+            }
+            set {
+                this["tvScrollSpeed"] = value;
             }
         }
     }

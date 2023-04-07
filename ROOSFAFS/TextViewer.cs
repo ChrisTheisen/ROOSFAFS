@@ -66,7 +66,8 @@ namespace Searcher
 
                 FancyTextBox ftb = new FancyTextBox(fi.FullName, _highlights)
                 {
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill, 
+                    ScrollSpeed = _properties.scrollSpeed
                 };
                 tp.Controls.Add(ftb);
 
@@ -82,6 +83,7 @@ namespace Searcher
         private void enforceSettings()
         {
             //TODO: FONT
+            //TODO: update scrollspeed
 
             if (!_properties.showRightPanel)
             {

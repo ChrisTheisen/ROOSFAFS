@@ -7,13 +7,12 @@ using System.Text.RegularExpressions;
 
 //highlights
 //language syntax
-//scrollbar
-    //tweak maxValue
-
-
+//occasionally line numbers are off by one.
 
 namespace Searcher {
     public partial class FancyTextBox : UserControl {
+        public int ScrollSpeed { get; set; }
+
         public FancyTextBox() {
             InitializeComponent();
             _highlighters = new List<HighlightSearch>();
@@ -23,7 +22,6 @@ namespace Searcher {
             InitializeComponent();
             FilePath = filePath;
             _highlighters = new List<HighlightSearch>();
-
             loadFileContents();
         }
 
@@ -31,10 +29,8 @@ namespace Searcher {
             InitializeComponent();
             FilePath = filePath;
             _highlighters = highlighters;
-
             loadFileContents();
         }
-
 
         public string FilePath { get; private set; }
 
@@ -90,26 +86,6 @@ namespace Searcher {
                     totalHeight += c[0].Height;
                 }
             }
-
-            //hack to keep line numbers inline with text. Otherwise sometimes it is a fraction of a line off.
-            /*
-             Try this at some point:
-                using System.Runtime.InteropServices;
-
-                .......................................
-
-                [DllImport("user32.dll")]
-                static extern int SendMessage(IntPtr hWnd, uint wMsg, UIntPtr wParam, IntPtr lParam);
-
-                .......................................
-
-                SendMessage(myRichTextBox.Handle, (uint)0x00B6, (UIntPtr)0, (IntPtr)(-1));
-
-             */
-            var caret = rtbContent.GetFirstCharIndexFromLine(first);
-            if (caret == -1) return;
-            rtbContent.Focus();
-            rtbContent.Select(caret, 0);
         }
 
         private void loadFileContents() {
@@ -185,6 +161,8 @@ namespace Searcher {
         private void rtbContent_VScroll(object sender, EventArgs e)
         {
             generateLineNumbers();
+            //var isBottom = rtbContent.GetPositionFromCharIndex(rtbContent.Text.Length - 1).Y < rtbContent.Height;
+            //Do I need to fix anything here?
         }
 
         private void rtbContent_Resize(object sender, EventArgs e)

@@ -31,7 +31,6 @@
             this.barOpacity = new System.Windows.Forms.TrackBar();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.chkShowRightPanel = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.numFontSize = new System.Windows.Forms.NumericUpDown();
             this.colorPicker = new System.Windows.Forms.ColorDialog();
             this.chkConfirmTabClose = new System.Windows.Forms.CheckBox();
@@ -41,8 +40,11 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.ddlFontFamily = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numScrollSpeed = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.barOpacity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numScrollSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // barOpacity
@@ -55,7 +57,7 @@
             this.barOpacity.Minimum = 20;
             this.barOpacity.Name = "barOpacity";
             this.barOpacity.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.barOpacity.Size = new System.Drawing.Size(26, 161);
+            this.barOpacity.Size = new System.Drawing.Size(26, 178);
             this.barOpacity.SmallChange = 5;
             this.barOpacity.TabIndex = 6;
             this.barOpacity.TabStop = false;
@@ -67,26 +69,16 @@
             // chkShowRightPanel
             // 
             this.chkShowRightPanel.AutoSize = true;
-            this.chkShowRightPanel.Location = new System.Drawing.Point(25, 25);
+            this.chkShowRightPanel.Location = new System.Drawing.Point(25, 112);
             this.chkShowRightPanel.Name = "chkShowRightPanel";
             this.chkShowRightPanel.Size = new System.Drawing.Size(111, 17);
             this.chkShowRightPanel.TabIndex = 7;
             this.chkShowRightPanel.Text = "Show Right Panel";
             this.chkShowRightPanel.UseVisualStyleBackColor = true;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Right Panel";
-            // 
             // numFontSize
             // 
-            this.numFontSize.Location = new System.Drawing.Point(226, 58);
+            this.numFontSize.Location = new System.Drawing.Point(226, 7);
             this.numFontSize.Maximum = new decimal(new int[] {
             72,
             0,
@@ -109,7 +101,7 @@
             // chkConfirmTabClose
             // 
             this.chkConfirmTabClose.AutoSize = true;
-            this.chkConfirmTabClose.Location = new System.Drawing.Point(220, 25);
+            this.chkConfirmTabClose.Location = new System.Drawing.Point(25, 89);
             this.chkConfirmTabClose.Name = "chkConfirmTabClose";
             this.chkConfirmTabClose.Size = new System.Drawing.Size(112, 17);
             this.chkConfirmTabClose.TabIndex = 22;
@@ -120,7 +112,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(207, 9);
+            this.label4.Location = new System.Drawing.Point(12, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(33, 13);
             this.label4.TabIndex = 23;
@@ -129,7 +121,7 @@
             // btnRestoreDefaults
             // 
             this.btnRestoreDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRestoreDefaults.Location = new System.Drawing.Point(12, 126);
+            this.btnRestoreDefaults.Location = new System.Drawing.Point(12, 143);
             this.btnRestoreDefaults.Name = "btnRestoreDefaults";
             this.btnRestoreDefaults.Size = new System.Drawing.Size(115, 23);
             this.btnRestoreDefaults.TabIndex = 25;
@@ -140,7 +132,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(226, 126);
+            this.btnClose.Location = new System.Drawing.Point(226, 143);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(61, 23);
             this.btnClose.TabIndex = 27;
@@ -151,7 +143,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(293, 126);
+            this.btnSave.Location = new System.Drawing.Point(293, 143);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(59, 23);
             this.btnSave.TabIndex = 26;
@@ -162,7 +154,7 @@
             // ddlFontFamily
             // 
             this.ddlFontFamily.FormattingEnabled = true;
-            this.ddlFontFamily.Location = new System.Drawing.Point(50, 57);
+            this.ddlFontFamily.Location = new System.Drawing.Point(50, 6);
             this.ddlFontFamily.Name = "ddlFontFamily";
             this.ddlFontFamily.Size = new System.Drawing.Size(164, 21);
             this.ddlFontFamily.TabIndex = 29;
@@ -171,17 +163,51 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 60);
+            this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 30;
             this.label2.Text = "Font";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 13);
+            this.label3.TabIndex = 31;
+            this.label3.Text = "Scroll Speed";
+            // 
+            // numScrollSpeed
+            // 
+            this.numScrollSpeed.Location = new System.Drawing.Point(97, 41);
+            this.numScrollSpeed.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numScrollSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numScrollSpeed.Name = "numScrollSpeed";
+            this.numScrollSpeed.Size = new System.Drawing.Size(61, 20);
+            this.numScrollSpeed.TabIndex = 32;
+            this.numScrollSpeed.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
             // TextViewerSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 161);
+            this.ClientSize = new System.Drawing.Size(384, 178);
+            this.Controls.Add(this.numScrollSpeed);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.ddlFontFamily);
             this.Controls.Add(this.btnClose);
@@ -190,7 +216,6 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.chkConfirmTabClose);
             this.Controls.Add(this.numFontSize);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.chkShowRightPanel);
             this.Controls.Add(this.barOpacity);
             this.MinimumSize = new System.Drawing.Size(400, 200);
@@ -201,6 +226,7 @@
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.barOpacity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFontSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numScrollSpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -210,7 +236,6 @@
         private System.Windows.Forms.TrackBar barOpacity;
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.CheckBox chkShowRightPanel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numFontSize;
         private System.Windows.Forms.ColorDialog colorPicker;
         private System.Windows.Forms.CheckBox chkConfirmTabClose;
@@ -220,5 +245,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox ddlFontFamily;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown numScrollSpeed;
     }
 }

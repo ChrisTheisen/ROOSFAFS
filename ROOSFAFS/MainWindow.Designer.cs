@@ -937,6 +937,7 @@
             this.Controls.Add(this.mnuStrip);
             this.Controls.Add(this.ddlFilterInclude);
             this.Controls.Add(this.ddlFilterType);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mnuStrip;
             this.Name = "MainWindow";

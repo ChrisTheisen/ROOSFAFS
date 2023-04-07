@@ -248,7 +248,7 @@ namespace Searcher
 
 			if (fi.Length < sp.SizeMin || fi.Length > sp.SizeMax) { return true; }
 
-			IEnumerable<string> includedFiles = search as string[] ?? search.ToArray();
+			IEnumerable<string> includedFiles = search ?? search.ToArray();
 			return includedFiles.Any() && !(includedFiles.Contains(fi.Extension)
 											 || includedFiles.Contains(fi.Extension.TrimStart('.')));
 		}
