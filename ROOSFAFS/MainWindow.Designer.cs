@@ -443,6 +443,10 @@
             // mnuStrip
             // 
             this.mnuStrip.ImageScalingSize = new System.Drawing.Size(28, 28);
+            this.mnuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.mnuStrip.Location = new System.Drawing.Point(0, 0);
             this.mnuStrip.Name = "mnuStrip";
             this.mnuStrip.Size = new System.Drawing.Size(874, 24);

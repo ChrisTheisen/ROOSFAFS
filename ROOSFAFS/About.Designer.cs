@@ -113,7 +113,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "V: 0.9.230213";
+            this.label3.Text = "V: 0.9.230628";
             // 
             // btnClose
             // 
