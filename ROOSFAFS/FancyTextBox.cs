@@ -34,6 +34,11 @@ namespace Searcher {
 
         public string FilePath { get; private set; }
 
+        public void SetFont(Font font)
+        {
+            rtbContent.Font = font;
+        }
+
         private List<HighlightSearch> _highlighters { get; set; }
         public RichTextBox RichTextBox { get { return rtbContent; } }
 

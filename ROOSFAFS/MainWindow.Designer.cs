@@ -96,7 +96,6 @@
             this.ddlFilterInclude = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).BeginInit();
-            this.mnuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSizeMax)).BeginInit();
@@ -331,6 +330,8 @@
             this.grdResults.Size = new System.Drawing.Size(723, 305);
             this.grdResults.TabIndex = 30;
             this.grdResults.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResults_CellDoubleClick);
+            this.grdResults.SelectionChanged += new System.EventHandler(this.grdResults_SelectionChanged);
+            this.grdResults.Sorted += new System.EventHandler(this.grdResults_Sorted);
             this.grdResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.grdResults_KeyDown);
             this.grdResults.MouseLeave += new System.EventHandler(this.control_MouseLeave);
             this.grdResults.MouseHover += new System.EventHandler(this.control_MouseHover);
@@ -442,10 +443,6 @@
             // mnuStrip
             // 
             this.mnuStrip.ImageScalingSize = new System.Drawing.Size(28, 28);
-            this.mnuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem,
-            this.aboutToolStripMenuItem});
             this.mnuStrip.Location = new System.Drawing.Point(0, 0);
             this.mnuStrip.Name = "mnuStrip";
             this.mnuStrip.Size = new System.Drawing.Size(874, 24);
@@ -570,7 +567,7 @@
             // 
             this.numSizeMax.Location = new System.Drawing.Point(463, 185);
             this.numSizeMax.Maximum = new decimal(new int[] {
-            999999999,
+            99999999,
             0,
             0,
             0});
@@ -578,7 +575,7 @@
             this.numSizeMax.Size = new System.Drawing.Size(111, 20);
             this.numSizeMax.TabIndex = 60;
             this.numSizeMax.Value = new decimal(new int[] {
-            999999999,
+            999999,
             0,
             0,
             0});
@@ -943,8 +940,6 @@
             this.Name = "MainWindow";
             this.Text = "ROOSFAFS";
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).EndInit();
-            this.mnuStrip.ResumeLayout(false);
-            this.mnuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.panel1.ResumeLayout(false);

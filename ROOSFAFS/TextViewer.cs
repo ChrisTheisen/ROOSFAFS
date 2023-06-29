@@ -78,13 +78,15 @@ namespace Searcher
             tabFiles.SelectedIndex = 0;
             dgvHighlights.ClearSelection();
             txtNewHilight.Focus();
+            enforceSettings();
+
         }
 
         private void enforceSettings()
         {
             //TODO: FONT
             //TODO: update scrollspeed
-
+            setFont(_properties.font);
             if (!_properties.showRightPanel)
             {
                 spltTextViewer.Panel2Collapsed = true;
@@ -310,6 +312,15 @@ namespace Searcher
             ftb.RichTextBox.SelectionLength = matchLength;
 
             ftb.Focus();
+        }
+
+        private void setFont(Font font)
+        {
+            foreach (TabPage tab in tabFiles.TabPages)
+            {
+                var ftb = (FancyTextBox)tab.Controls[0];
+                ftb.SetFont(font);
+            }
         }
         #endregion
 

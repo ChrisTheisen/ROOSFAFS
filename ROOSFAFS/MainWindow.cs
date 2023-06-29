@@ -34,6 +34,8 @@ namespace Searcher
         private bool _newWarnings = false;
         private CancellationTokenSource _cancellationTokenSource;
 
+        private List<(string name, string dir)> _hiddenRows = new List<(string name, string dir)>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -207,6 +209,26 @@ namespace Searcher
 
             }
         }
+        private void grdResults_Sorted(object sender, EventArgs e)
+        {
+
+            var hidden = new List<DataGridViewRow>();
+
+            foreach (DataGridViewRow row in grdResults.Rows)
+            {
+                var name = row.Cells["Name"].Value.ToString();
+                var dir = row.Cells["Directory"].Value.ToString();
+                if (_hiddenRows.Any(x => x.name == name && x.dir == dir))
+                {
+                    row.Visible = false;
+                }
+            }
+        }
+
+        private void grdResults_SelectionChanged(object sender, EventArgs e)
+        {
+            updateCount();
+        }
         #endregion
         #region private
         private void prepSearch()
@@ -310,6 +332,9 @@ namespace Searcher
             var selected = new List<int>();
             foreach (DataGridViewRow row in grdResults.SelectedRows)
             {
+                var name = row.Cells["Name"].Value.ToString();
+                var dir = row.Cells["Directory"].Value.ToString();
+                _hiddenRows.Add((name, dir));
                 selected.Add(row.Index);
             }
 
@@ -527,7 +552,6 @@ namespace Searcher
             Clipboard.SetFileDropList(filePaths);
             lblStatus.Text = filePaths.Count + " Files copied to clipboard";
         }
-
         private void setDataColumns()
         {
             var hiddenRows = (from DataGridViewRow row in grdResults.Rows where !row.Visible select row.Index).ToList();
@@ -661,6 +685,22 @@ namespace Searcher
             toolTip.Hide(this);
         }
 
+        private void updateCount()
+        {
+            var text = "Done: ";
+            var selectedRows = grdResults.SelectedRows;
+            if (selectedRows.Count > 1)
+            {
+                text += $"Selected {selectedRows.Count} of ";
+            }
+            text += $"{grdResults.Rows.Count} hits ";
+            if (_hiddenRows.Count > 0)
+            {
+                text += $"({_hiddenRows.Count} hidden)";
+            }
+
+            this.lblStatus.Text = text;
+        }
         #endregion
 
         #region logging
@@ -927,7 +967,7 @@ namespace Searcher
             showToolTip((Control)sender, text);
 
         }
-        #endregion
 
+        #endregion
     }
 }
