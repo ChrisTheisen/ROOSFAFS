@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.pnlBottom = new System.Windows.Forms.Panel();
+            this.btnCopyPath = new System.Windows.Forms.Button();
             this.lblSize = new System.Windows.Forms.Label();
             this.lblPos = new System.Windows.Forms.Label();
             this.txtPath = new System.Windows.Forms.TextBox();
@@ -31,7 +32,6 @@
             this.rtbContent = new System.Windows.Forms.RichTextBox();
             this.pnlBody = new System.Windows.Forms.Panel();
             this.pnlLineNumbers = new System.Windows.Forms.Panel();
-            this.btnCopyPath = new System.Windows.Forms.Button();
             this.pnlBottom.SuspendLayout();
             this.pnlBody.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +49,17 @@
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(445, 50);
             this.pnlBottom.TabIndex = 0;
+            // 
+            // btnCopyPath
+            // 
+            this.btnCopyPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyPath.Location = new System.Drawing.Point(266, 3);
+            this.btnCopyPath.Name = "btnCopyPath";
+            this.btnCopyPath.Size = new System.Drawing.Size(84, 23);
+            this.btnCopyPath.TabIndex = 4;
+            this.btnCopyPath.Text = "Copy Path";
+            this.btnCopyPath.UseVisualStyleBackColor = true;
+            this.btnCopyPath.Click += new System.EventHandler(this.btnCopyPath_Click);
             // 
             // lblSize
             // 
@@ -120,17 +131,7 @@
             this.pnlLineNumbers.Name = "pnlLineNumbers";
             this.pnlLineNumbers.Size = new System.Drawing.Size(43, 387);
             this.pnlLineNumbers.TabIndex = 2;
-            // 
-            // btnCopyPath
-            // 
-            this.btnCopyPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyPath.Location = new System.Drawing.Point(266, 3);
-            this.btnCopyPath.Name = "btnCopyPath";
-            this.btnCopyPath.Size = new System.Drawing.Size(84, 23);
-            this.btnCopyPath.TabIndex = 4;
-            this.btnCopyPath.Text = "Copy Path";
-            this.btnCopyPath.UseVisualStyleBackColor = true;
-            this.btnCopyPath.Click += new System.EventHandler(this.btnCopyPath_Click);
+            this.pnlLineNumbers.Visible = false;
             // 
             // FancyTextBox
             // 
